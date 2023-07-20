@@ -1,0 +1,12 @@
+version: "3"
+services:
+  tljh:
+    build: .
+    privileged: true
+    # restart: always
+    ports:
+      - 8888:80
+    environment:
+      TZ: UTC/NEW_YORK
+    volumes:
+      - ./config.yaml:/opt/tljh/config/config.yaml

@@ -1,0 +1,12 @@
+base_url: /hub/
+limits:
+  memory: 6G
+  cpu: 4
+services:
+  cull:
+    enabled: false
+user_environment:
+  default_app: jupyterlab
+users:
+  admin:
+  - admin
