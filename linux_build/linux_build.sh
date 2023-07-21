@@ -3,8 +3,17 @@
 # This scrip will build a dev environment for new linux builds. Ubuntu 22X
 # Install anaconda, docker-desktop, and github-desktop
 
-echo("Begin install...")
+echo "Begin install..."
 sudo apt update && sudo apt upgrade
+
+# Install Visual Studio Code
+log "Install Visual Studio Code..."
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
+sudo sh -c 'echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+sudo apt-get install -y apt-transport-https
+sudo apt-get update
+sudo apt-get install -y code
 
 wget https://repo.anaconda.com/archive/Anaconda3-2020.07-Linux-x86_64.sh
 bash Anaconda3-2020.07-Linux-x86_64.sh
@@ -24,7 +33,7 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o 
 # sudo chmod +x /usr/local/bin/docker-compose
 # docker-compose --version
 
-echo("Install Github Desktop...")
+echo "Install Github Desktop..."
 wget -qO - https://mirror.mwt.me/ghd/gpgkey | sudo tee /etc/apt/trusted.gpg.d/shiftkey-desktop.asc > /dev/null
 
 sudo sh -c 'echo "deb [arch=amd64] https://packagecloud.io/shiftkey/desktop/any/ any main" > /etc/apt/sources.list.d/packagecloud-shiftkey-desktop.list'
@@ -34,10 +43,10 @@ sudo sh -c 'echo "deb [arch=amd64] https://mirror.mwt.me/ghd/deb/ any main" > /e
 sudo apt update
 sudo apt install github-desktop
 
-echo("Install Chrome...")
+echo "Install Chrome..."
 sudo apt install google-chrome-stable
 
-echo("Install Docker Desktop...")
+echo "Install Docker Desktop..." 
 sudo apt install gnome-terminal
 
 sudo apt-get update
@@ -56,4 +65,4 @@ echo \
 sudo apt-get update
 sudo apt-get install ./docker-desktop-4.21.1-amd64.deb
 
-echo(Done!!!)
+echo "Done!!!"

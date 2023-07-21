@@ -1,7 +1,7 @@
-base_url: /hub/
+base_url: /selab/
 limits:
-  memory: 6G
-  cpu: 4
+  memory: 4G
+  cpu: 2
 services:
   cull:
     enabled: false

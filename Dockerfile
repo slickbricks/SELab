@@ -25,6 +25,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     python3-pip \
     libssl-dev \
     libcurl4-openssl-dev \
+    r-base \
     && rm -rf /var/lib/apt/lists/*
 
 # Kill all the things we don't need
