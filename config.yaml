@@ -1,7 +1,7 @@
 base_url: /selab/
 limits:
   memory: 4G
-  cpu: 2
+  cpu: 4
 services:
   cull:
     enabled: false

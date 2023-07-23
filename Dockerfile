@@ -20,6 +20,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     curl \
     git \
     sudo \
+    nano \
     python3 \
     python3-venv \
     python3-pip \
