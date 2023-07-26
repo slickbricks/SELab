@@ -15,22 +15,16 @@ docker image rm -f selab-tljh
 docker-compose up -d
 check_status "docker-compose start"
 
-# Check if TLJH is already installed
-echo "Checking TLJH installation..."
-if docker-compose exec tljh bash -c "[ ! -d /opt/tljh ] || [ ! -d /opt/tljh/user/bin/conda ]"; then
-    echo "TLJH not fully installed. Installing..."
-    # Install tljh
-    AUTH_ADMIN=admin:admin
-    if [[ -n $1 ]]; then
-        AUTH_ADMIN=$1
-    fi
-    docker-compose exec tljh bash -c "set -e; \
-        curl -L https://tljh.jupyter.org/bootstrap.py \
-        | sudo python3 - --show-progress-page --admin $AUTH_ADMIN"
-    check_status "TLJH installation"
-else
-    echo "TLJH already fully installed. Skipping installation."
+# Install tljh
+AUTH_ADMIN=admin:admin
+if [[ -n $1 ]]; then
+    AUTH_ADMIN=$1
 fi
+echo "Create User: $AUTH_ADMIN"
+docker-compose exec tljh bash -c \
+    "curl -L https://tljh.jupyter.org/bootstrap.py \
+    | sudo python3 - --show-progress-page --admin $AUTH_ADMIN"
+check_status "Installed tljh"
 
 # Update base env
 echo "Installing base env packages..."
