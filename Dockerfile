@@ -47,7 +47,7 @@ STOPSIGNAL SIGRTMIN+3
 # Uncomment these lines for a development install
 # ENV TLJH_BOOTSTRAP_DEV=yes \
 #     TLJH_BOOTSTRAP_PIP_SPEC=/srv/src \
-ENV PATH=/opt/tljh/hub/bin:${PATH} 
+ENV PATH=/opt/tljh/hub/bin:${PATH}
 
 EXPOSE 80
 
