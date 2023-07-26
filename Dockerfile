@@ -27,6 +27,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     libssl-dev \
     libcurl4-openssl-dev \
     r-base \
+    inetutils-syslogd \
     && rm -rf /var/lib/apt/lists/*
 
 # Kill all the things we don't need

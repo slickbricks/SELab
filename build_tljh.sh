@@ -1,58 +1,81 @@
 #!/bin/bash
 set -e
+set -o pipefail
+
+# Define a log file
+LOGFILE="$(dirname "$0")/logfile.log"
 
 # Define a function to check the status
 check_status() {
     if [ $? -eq 0 ]; then
-        echo -e "\e[32m✔ $1\e[0m"
+        echo "SUCCESS: $1" | tee -a $LOGFILE
     else
-        echo -e "\e[31m✘ $1\e[0m"
+        echo "FAILED: $1" | tee -a $LOGFILE
+        exit 1
     fi
 }
 
-echo "Starting docker-compose..."
-docker image rm -f selab-tljh
-docker-compose up -d
-check_status "docker-compose start"
+# Start docker compose
+start_docker() {
+    echo "Starting docker-compose..." | tee -a $LOGFILE
+    docker image rm -f selab-tljh
+    docker-compose up -d
+    check_status "docker-compose start"
+}
 
 # Install tljh
-AUTH_ADMIN=admin:admin
-if [[ -n $1 ]]; then
-    AUTH_ADMIN=$1
-fi
-echo "Create User: $AUTH_ADMIN"
-docker-compose exec tljh bash -c \
-    "curl -L https://tljh.jupyter.org/bootstrap.py \
-    | sudo python3 - --show-progress-page --admin $AUTH_ADMIN"
-check_status "Installed tljh"
+install_tljh() {
+    AUTH_ADMIN=${AUTH_ADMIN:-"admin:admin"}
+    echo "Create User: $AUTH_ADMIN" | tee -a $LOGFILE
+    docker-compose exec tljh bash -c \
+        "curl -L https://tljh.jupyter.org/bootstrap.py \
+        | sudo python3 - --show-progress-page --admin $AUTH_ADMIN"
+    check_status "Installed tljh"
+}
 
 # Update base env
-echo "Installing base env packages..."
-docker-compose exec tljh bash -c "set -e; \
-    sudo -E /opt/tljh/user/bin/mamba update conda -y && \
-    sudo -E /opt/tljh/user/bin/mamba install python="3.9" && \
-    sudo -E /opt/tljh/user/bin/mamba install -c conda-forge \
-    nodejs ipyparallel scipy pandas matplotlib scikit-learn keras tensorflow -y"
-check_status "Base envrironments update"
+update_base_env() {
+    echo "Installing base env packages..." | tee -a $LOGFILE
+    docker-compose exec tljh bash -c "set -e; \
+        sudo -E /opt/tljh/user/bin/mamba update conda -y && \
+        sudo -E /opt/tljh/user/bin/mamba install python="3.9" && \
+        sudo -E /opt/tljh/user/bin/mamba install -c conda-forge \
+        nodejs ipyparallel scipy pandas matplotlib scikit-learn keras tensorflow -y"
+    check_status "Base environments update"
+}
 
 # Build environments
-echo "Building Sysml enviorments..."
-docker-compose exec tljh bash -c "\
-    sudo /opt/tljh/user/bin/mamba create --name sysmlv2 jupyter-sysml-kernel -y && \
-    sudo /opt/tljh/user/bin/mamba create --name r_env r-irkernel -y && \
-    sudo /opt/tljh/user/bin/mamba install nb_conda_kernels -y"
-check_status "Conda envrironments setup"
+build_envs() {
+    echo "Building Sysml environments..." | tee -a $LOGFILE
+    docker-compose exec tljh bash -c "\
+        sudo /opt/tljh/user/bin/mamba create --name sysmlv2 jupyter-sysml-kernel -y && \
+        sudo /opt/tljh/user/bin/mamba create --name r_env r-irkernel -y && \
+        sudo /opt/tljh/user/bin/mamba install nb_conda_kernels -y"
+    check_status "Conda environments setup"
+}
 
 # Install elyra
-echo "Installing Elyra..."
-docker-compose exec tljh bash -c "set -e; \
-    sudo -E /opt/tljh/user/bin/pip install --upgrade 'elyra[all]'"
-check_status "Elyra Installtion"
+install_elyra() {
+    echo "Installing Elyra..." | tee -a $LOGFILE
+    docker-compose exec tljh bash -c "set -e; \
+        sudo -E /opt/tljh/user/bin/pip install --upgrade 'elyra[all]'"
+    check_status "Elyra Installation"
+}
 
 # Update sysmlv2 kernel model publish location
-echo "Updating the Sysmlv2 kernel model publishing location"
-docker-compose exec tljh bash -c "set -e; \
-    sudo sed -i 's|\"ISYSML_API_BASE_PATH\": \"http://sysml2.intercax.com:9000\"|\"ISYSML_API_BASE_PATH\": \"http://localhost:9000\"|g' /opt/tljh/user/envs/sysmlv2/share/jupyter/kernels/sysml/kernel.json"
-check_status "Sysmlv2 model publish location"
+update_sysmlv2() {
+    echo "Updating the Sysmlv2 kernel model publishing location" | tee -a $LOGFILE
+    docker-compose exec tljh bash -c "set -e; \
+        sudo sed -i 's|\"ISYSML_API_BASE_PATH\": \"http://sysml2.intercax.com:9000\"|\"ISYSML_API_BASE_PATH\": \"http://localhost:9000\"|g' /opt/tljh/user/envs/sysmlv2/share/jupyter/kernels/sysml/kernel.json"
+    check_status "Sysmlv2 model publish location"
+}
 
-echo "Script completed successfully."
+# Call the functions
+start_docker
+install_tljh
+update_base_env
+build_envs
+install_elyra
+update_sysmlv2
+
+echo "Script completed successfully." | tee -a $LOGFILE
