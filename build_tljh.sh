@@ -49,4 +49,10 @@ docker-compose exec tljh bash -c "set -e; \
     sudo -E /opt/tljh/user/bin/pip install --upgrade 'elyra[all]'"
 check_status "Elyra Installtion"
 
+# Update sysmlv2 kernel model publish location
+echo "Updating the Sysmlv2 kernel model publishing location"
+docker-compose exec tljh bash -c "set -e; \
+    sudo sed -i 's|\"ISYSML_API_BASE_PATH\": \"http://sysml2.intercax.com:9000\"|\"ISYSML_API_BASE_PATH\": \"http://localhost:9000\"|g' /opt/tljh/user/envs/sysmlv2/share/jupyter/kernels/sysml/kernel.json"
+check_status "Sysmlv2 model publish location"
+
 echo "Script completed successfully."
