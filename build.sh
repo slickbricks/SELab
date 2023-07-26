@@ -2,8 +2,10 @@
 set -e
 set -o pipefail
 
-# Define a log file
-LOGFILE="$(dirname "$0")/logfile.log"
+# Define a log file with a timestamp
+NOW=$(date +"%Y%m%d_%H%M%S")
+LOGFILE="$(dirname "$0")/logs/logfile_$NOW.log"
+
 
 # Define a function to check the status
 check_status() {

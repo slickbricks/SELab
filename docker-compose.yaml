@@ -9,4 +9,4 @@ services:
     environment:
       TZ: UTC/NEW_YORK
     volumes:
-      - ./config.yaml:/opt/tljh/config/config.yaml
+      - ./config/config.yaml:/opt/tljh/config/config.yaml
