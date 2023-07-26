@@ -36,7 +36,7 @@ fi
 echo "Installing base env packages..."
 docker-compose exec tljh bash -c "set -e; \
     sudo -E /opt/tljh/user/bin/mamba update conda -y && \
-    sudo -E /opt/tljh/user/bin/mamba install python="3.9"
+    sudo -E /opt/tljh/user/bin/mamba install python="3.9" && \
     sudo -E /opt/tljh/user/bin/mamba install -c conda-forge \
     nodejs ipyparallel scipy pandas matplotlib scikit-learn keras tensorflow -y"
 check_status "Base envrironments update"
@@ -45,16 +45,11 @@ check_status "Base envrironments update"
 echo "Building Sysml enviorments..."
 docker-compose exec tljh bash -c "\
     sudo /opt/tljh/user/bin/mamba create --name sysmlv2 jupyter-sysml-kernel -y && \
-    sudo /opt/tljh/user/bin/mamba create --name r_env r-irkernel -y"
+    sudo /opt/tljh/user/bin/mamba create --name r_env r-irkernel -y && \
+    sudo /opt/tljh/user/bin/mamba install nb_conda_kernels -y"
 check_status "Conda envrironments setup"
 
-# Install nb_kerenls...
-echo "Installing nb_kernels..."
-docker-compose exec tljh bash -c "\
-    sudo /opt/tljh/user/bin/mamba install nb_conda_kernels -y"
-check_status "Create environment kernels"
-
-# Install elyra (Watch the order here or things can brake so elyra last using pip...)
+# Install elyra
 echo "Installing Elyra..."
 docker-compose exec tljh bash -c "set -e; \
     sudo -E /opt/tljh/user/bin/pip install --upgrade 'elyra[all]'"
