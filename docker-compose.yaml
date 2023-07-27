@@ -39,6 +39,8 @@ services:
       TZ: UTC/NEW_YORK
     volumes:
       - ./config/config.yaml:/opt/tljh/config/config.yaml
+      - ./envs:/tmp/envs/
+      - ./updates:/tmp/updates/
     networks:
       - thenetwork
 

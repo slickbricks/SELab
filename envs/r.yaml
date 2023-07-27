@@ -1,0 +1,16 @@
+name: r
+channels:
+  - r
+  - conda-forge
+  - defaults
+dependencies:
+  - r-base=4.1.1
+  - r-irkernel
+  - r-tidyverse
+  - r-data.table
+  - r-caret
+  - r-randomforest
+  - r-gbm
+  - r-rpart
+  - r-nnet
+  - r-kernlab

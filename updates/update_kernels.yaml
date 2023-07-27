@@ -1,6 +1,6 @@
-name: sysmlv2
+name: base
 channels:
   - conda-forge
   - defaults
 dependencies:
-  - jupyter-sysml-kernel
+  - nb_conda_kernels

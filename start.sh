@@ -52,24 +52,33 @@ update_base_env() {
     echo "Installing base env packages..." | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
         sudo -E /opt/tljh/user/bin/mamba update conda -y && \
-        sudo -E /opt/tljh/user/bin/mamba env update -n base -f \"$SCRIPT_DIR/envs/base.yaml\""
+        sudo -E /opt/tljh/user/bin/mamba env update -n base -f /tmp/updates/base_env.yaml"
     check_status "Base environments update"
 }
 
-# Build environments
-build_envs() {
-    echo "Building Sysml environments..." | tee -a $LOGFILE
-    docker-compose exec tljh bash -c "\
-        sudo /opt/tljh/user/bin/mamba create --name sysmlv2 jupyter-sysml-kernel -y && \
-        sudo /opt/tljh/user/bin/mamba create --name r_env r-irkernel -y && \
-        sudo /opt/tljh/user/bin/mamba install nb_conda_kernels -y"
-    check_status "Conda environments setup"
+build_env_kernels() {
+    echo "Building environment kernels..." | tee -a $LOGFILE
+    docker-compose exec tljh bash -c 'set -e; 
+        for env_file in $(ls /tmp/envs/*.yaml); do
+            env_name=$(basename $env_file .yaml);
+            echo "Processing environment: $env_name";
+            echo "List of environments:";
+            sudo -E /opt/tljh/user/bin/mamba info --envs;
+            if [[ $(sudo -E /opt/tljh/user/bin/mamba info --envs | grep -w $env_name) ]]; then
+                echo "Updating environment $env_name";
+                sudo -E /opt/tljh/user/bin/mamba env update --name $env_name -f $env_file
+            else
+                echo "Creating environment $env_name";
+                sudo -E /opt/tljh/user/bin/mamba env create -f $env_file
+            fi
+        done && sudo -E /opt/tljh/user/bin/mamba env update -f /tmp/updates/update_kernels.yaml'
+    check_status "Build environment kernels"
 }
 
 install_elyra() {
     echo "Installing Elyra..." | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
-        sudo -E /opt/tljh/user/bin/pip install --upgrade -r reqs/elyra.txt"
+        sudo -E /opt/tljh/user/bin/pip install --upgrade -r /tmp/envs/elyra.txt"
     check_status "Elyra Installation"
 }
 
@@ -85,7 +94,7 @@ update_sysmlv2() {
 start_docker
 install_tljh
 update_base_env
-build_envs
+build_env_kernels
 install_elyra
 update_sysmlv2
 
