@@ -6,6 +6,8 @@ set -o pipefail
 NOW=$(date +"%Y%m%d_%H%M%S")
 LOGFILE="$(dirname "$0")/logs/logfile_$NOW.log"
 
+# Get the directory containing this script.
+SCRIPT_DIR="$(dirname "$(readlink -f "$BASH_SOURCE")")"
 
 # Define a function to check the status
 check_status() {
@@ -46,14 +48,11 @@ install_tljh() {
     check_status "Installed tljh"
 }
 
-# Update base env
 update_base_env() {
     echo "Installing base env packages..." | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
         sudo -E /opt/tljh/user/bin/mamba update conda -y && \
-        sudo -E /opt/tljh/user/bin/mamba install python="3.9" && \
-        sudo -E /opt/tljh/user/bin/mamba install -c conda-forge \
-        nodejs ipyparallel scipy pandas matplotlib scikit-learn keras tensorflow -y"
+        sudo -E /opt/tljh/user/bin/mamba env update -n base -f \"$SCRIPT_DIR/envs/base.yaml\""
     check_status "Base environments update"
 }
 
@@ -67,11 +66,10 @@ build_envs() {
     check_status "Conda environments setup"
 }
 
-# Install elyra
 install_elyra() {
     echo "Installing Elyra..." | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
-        sudo -E /opt/tljh/user/bin/pip install --upgrade 'elyra[all]'"
+        sudo -E /opt/tljh/user/bin/pip install --upgrade -r reqs/elyra.txt"
     check_status "Elyra Installation"
 }
 
