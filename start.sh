@@ -17,8 +17,19 @@ check_status() {
     fi
 }
 
-# Start docker compose
+# Start docker-compose
 start_docker() {
+
+    # Check if the Docker network exists and create it if it does not
+    if [ -z "$(docker network ls | grep thenetwork)" ]; then
+    docker network create thenetwork
+    fi
+
+    # Check if the Docker volume exists and create it if it does not
+    if [ -z "$(docker volume ls | grep postgresdbserver)" ]; then
+    docker volume create postgresdbserver
+    fi
+    
     echo "Starting docker-compose..." | tee -a $LOGFILE
     docker image rm -f selab-tljh
     docker-compose up -d
@@ -68,7 +79,7 @@ install_elyra() {
 update_sysmlv2() {
     echo "Updating the Sysmlv2 kernel model publishing location" | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
-        sudo sed -i 's|\"ISYSML_API_BASE_PATH\": \"http://sysml2.intercax.com:9000\"|\"ISYSML_API_BASE_PATH\": \"http://localhost:9000\"|g' /opt/tljh/user/envs/sysmlv2/share/jupyter/kernels/sysml/kernel.json"
+        sudo sed -i 's|\"ISYSML_API_BASE_PATH\": \"http://sysml2.intercax.com:9000\"|\"ISYSML_API_BASE_PATH\": \"http://sysmlapiserver:9000\"|g' /opt/tljh/user/envs/sysmlv2/share/jupyter/kernels/sysml/kernel.json"
     check_status "Sysmlv2 model publish location"
 }
 
