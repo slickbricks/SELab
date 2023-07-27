@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -e #
 set -o pipefail
 
 # Define a log file with a timestamp
