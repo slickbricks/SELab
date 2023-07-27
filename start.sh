@@ -65,10 +65,15 @@ start_docker() {
     if [ -z "$(docker volume ls | grep postgresdbserver)" ]; then
     docker volume create postgresdbserver
     fi
+
+    # Check if the Docker volume exists and create it if it does not
+    if [ -z "$(docker volume ls | grep user-data)" ]; then
+    docker volume create user-data
+    fi
     
     echo "Starting docker-compose..." | tee -a $LOGFILE
     docker image rm -f selab-tljh
-    docker-compose up -d
+    docker-compose up -d --build
     check_status "docker-compose start"
 }
 
