@@ -1,0 +1,15 @@
+name: base
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - nodejs
+  - ipyparallel
+  - scipy
+  - pandas
+  - matplotlib
+  - scikit-learn
+  - keras
+  - tensorflow
+  - nbgitpuller
