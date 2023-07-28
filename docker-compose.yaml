@@ -18,6 +18,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.api
+    image: avianinc/sysmlapiserver
     tty: true
     depends_on:
       - postgresdbserver
@@ -31,6 +32,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.tljh
+    image: avianinc/selab
     privileged: true
     # restart: always
     ports:
