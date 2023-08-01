@@ -81,8 +81,8 @@ start_docker() {
 install_tljh() {
     AUTH_ADMIN=${AUTH_ADMIN:-"admin:admin"}
     echo "Create User: $AUTH_ADMIN" | tee -a $LOGFILE
-    docker-compose exec tljh bash -c \
-        "curl -L https://tljh.jupyter.org/bootstrap.py \
+    docker-compose exec tljh bash -c "set -e; \
+        curl -L https://tljh.jupyter.org/bootstrap.py \
         | sudo python3 - --show-progress-page --admin $AUTH_ADMIN"
     check_status "Installed tljh"
 }
