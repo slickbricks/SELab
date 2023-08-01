@@ -2,14 +2,25 @@ name: base
 channels:
   - conda-forge
   - defaults
+  - r 
 dependencies:
-  - python=3.9
+  # - python=3.9
   - nodejs
-  - ipyparallel
+  # - ipyparallel
   - scipy
   - pandas
   - matplotlib
-  - scikit-learn
-  - keras
-  - tensorflow
-  - nbgitpuller
+  # - jupyterlab = 4.0.3
+  #- scikit-learn
+  #- keras
+  #- tensorflow
+  #- nbgitpuller
+  - pip
+  - pip:
+    - sos
+    - sos-pbs
+    - sos-notebook
+    - jupyterlab-sos
+    - sos-bash
+    - sos-python
+    - sos-r

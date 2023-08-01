@@ -1,0 +1,12 @@
+name: base
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - sos
+  - sos-pbs
+  - sos-notebook
+  - jupyterlab-sos
+  - sos-bash
+  - sos-python
+  - sos-r
