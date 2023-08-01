@@ -1,0 +1,10 @@
+name: dakota
+channels:
+  - conda-forge
+  - defaults
+  - csdms-stack
+dependencies:
+  - ipykernel
+  - dakota
+  - openmdao
+  - dakotathon
