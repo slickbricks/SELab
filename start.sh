@@ -87,22 +87,22 @@ install_tljh() {
     check_status "Installed tljh"
 }
 
-# # Update the base per the base_env.yaml
-# update_base_env() {
-#     echo "Installing base env packages..." | tee -a $LOGFILE
-#     docker-compose exec tljh bash -c "set -e; \
-#         sudo -E /opt/tljh/user/bin/mamba update conda -y && \
-#         sudo -E /opt/tljh/user/bin/mamba env update -n base -f /tmp/updates/base_env.yaml"
-#     check_status "Base environments update"
-# }
-
 # Update the base per the base_env.yaml
 update_base_env() {
     echo "Installing base env packages..." | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
-        sudo -E /opt/tljh/user/bin/mamba install nodejs sos sos-notebook sos-python sos-r sos-bash jupyterlab-sos python=3.8 -y"
+        sudo -E /opt/tljh/user/bin/mamba update conda -y && \
+        sudo -E /opt/tljh/user/bin/mamba env update -n base -f /tmp/updates/base_env.yaml"
     check_status "Base environments update"
 }
+
+# # Update the base per the base_env.yaml
+# update_base_env() {
+#     echo "Installing base env packages..." | tee -a $LOGFILE
+#     docker-compose exec tljh bash -c "set -e; \
+#         sudo -E /opt/tljh/user/bin/conda env update -n base -f /tmp/updates/base_env.yaml"
+#     check_status "Base environments update"
+# }
 
 # This function loops through all yaml files in the /tmp/envs and builds 
 # the conda environments and the jupyter kernel.
@@ -113,13 +113,13 @@ build_env_kernels() {
             env_name=$(basename $env_file .yaml);
             echo "Processing environment: $env_name";
             echo "List of environments:";
-            sudo -E /opt/tljh/user/bin/conda info --envs;
-            if [[ $(sudo -E /opt/tljh/user/bin/conda info --envs | grep -w $env_name) ]]; then
+            sudo -E /opt/tljh/user/bin/mamba info --envs;
+            if [[ $(sudo -E /opt/tljh/user/bin/mamba info --envs | grep -w $env_name) ]]; then
                 echo "Updating environment $env_name";
-                sudo -E /opt/tljh/user/bin/conda env update --name $env_name -f $env_file
+                sudo -E /opt/tljh/user/bin/mamba env update --name $env_name -f $env_file
             else
                 echo "Creating environment $env_name";
-                sudo -E /opt/tljh/user/bin/conda env create -f $env_file
+                sudo -E /opt/tljh/user/bin/mamba env create -f $env_file
             fi
         done && sudo -E /opt/tljh/user/bin/conda env update -f /tmp/updates/update_kernels.yaml'
     check_status "Build environment kernels"
@@ -145,7 +145,7 @@ update_sysmlv2() {
 start_docker
 install_tljh
 update_base_env
-# build_env_kernels
+build_env_kernels
 # install_elyra
 # update_sysmlv2
 
