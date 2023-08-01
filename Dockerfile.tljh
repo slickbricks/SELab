@@ -21,6 +21,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     git \
     sudo \
     nano \
+    wget \
+    tar \
     python3 \
     python3-venv \
     python3-pip \
@@ -51,6 +53,32 @@ STOPSIGNAL SIGRTMIN+3
 #     TLJH_BOOTSTRAP_PIP_SPEC=/srv/src \
 ENV PATH=/opt/tljh/hub/bin:${PATH}
 
+# Install Java
+RUN apt-get update && apt-get install -y lsb-release
+
+RUN DIST_VER=$(lsb_release -r | awk '{print $2}') && \
+    JAVA_VER=openjdk-16-jdk && \
+    if [ "${DIST_VER}" = "20.04" ]; then \
+        echo "Installing ${JAVA_VER} for Ubuntu ${DIST_VER}"; \
+        DEBIAN_FRONTEND=noninteractive apt-get update && \
+        apt-get install -y ${JAVA_VER} || \
+        (echo -e "\nCheck if a different version of java is available and edit Dockerfile accordingly"; exit 1) \
+    else \
+        echo "Don't know what java to install for Ubuntu ${DIST_VER}"; \
+        exit 1; \
+    fi
+
+# Add netlogo
+RUN NETLOGO_VER=6.2.0 && \
+    mkdir -p /opt && \
+    cd /opt && \
+    wget https://ccl.northwestern.edu/netlogo/$NETLOGO_VER/NetLogo-$NETLOGO_VER-64.tgz && \
+    tar xf NetLogo-$NETLOGO_VER-64.tgz && \
+    echo Netlogo has been installed in /opt > netlogo
+
+ENV PATH="/opt/NetLogo\ ${NETLOGO_VER}:${PATH}"
+
+# Expose the server port
 EXPOSE 80
 
 CMD ["/bin/bash", "-c", "exec /lib/systemd/systemd --log-target=journal 3>&1"]

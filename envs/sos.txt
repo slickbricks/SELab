@@ -1,0 +1,6 @@
+sos
+sos-notebook
+jupyter-sos
+sos-r
+sos-python
+sos-bash
