@@ -72,7 +72,7 @@ start_docker() {
     fi
     
     echo "Starting docker-compose..." | tee -a $LOGFILE
-    docker image rm -f selab-tljh
+    # docker image rm -f selab-tljh
     docker-compose up -d --build
     check_status "docker-compose start"
 }
@@ -91,7 +91,6 @@ install_tljh() {
 update_base_env() {
     echo "Installing base env packages..." | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
-        sudo -E /opt/tljh/user/bin/mamba update conda -y && \
         sudo -E /opt/tljh/user/bin/mamba env update -n base -f /tmp/updates/base_env.yaml"
     check_status "Base environments update"
 }
@@ -133,6 +132,14 @@ update_sysmlv2() {
     check_status "Sysmlv2 model publish location"
 }
 
+# Update sysmlv2 kernel model publish location
+build_jupyterlab() {
+    echo "Building jupyterlab" | tee -a $LOGFILE
+    docker-compose exec tljh bash -c "set -e; \
+        sudo -E /opt/tljh/user/bin/jupyter lab build"
+    check_status "Sysmlv2 model publish location"
+}
+
 # Call the functions
 start_docker
 install_tljh
@@ -140,6 +147,7 @@ update_base_env
 build_env_kernels
 install_elyra
 update_sysmlv2
+build_jupyterlab
 
 # Done!!!
 echo "Script completed successfully." | tee -a $LOGFILE

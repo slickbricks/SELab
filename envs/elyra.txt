@@ -1,1 +1,7 @@
-elyra[all]
+elyra[all]==3.6.0
+sos 
+sos-python
+sos-r
+sos-bash
+sos-notebook 
+jupyterlab-sos
