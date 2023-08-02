@@ -4,7 +4,8 @@ plotly
 SALib
 jpype1
 pynetlogo
-seabornxlrf
+seaborn
+xlrd
 openpyxl
 ipydrawio
 ipydrawio-export

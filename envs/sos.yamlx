@@ -1,0 +1,13 @@
+name: base
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - jupyter_nbextensions_configurator
+  - jupyterlab_sos
+  - sos-notebook
+  - sos-papermill
+  - sos-r
+  - sos-python
+  - sos-bash
