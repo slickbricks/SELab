@@ -64,12 +64,16 @@ RUN DIST_VER=$(lsb_release -r | awk '{print $2}') && \
         exit 1; \
     fi
 
-# Install NetLogo
-RUN wget https://ccl.northwestern.edu/netlogo/${NETLOGO_VERSION}/NetLogo-${NETLOGO_VERSION}-64.tgz
-RUN tar -xvf NetLogo-${NETLOGO_VERSION}-64.tgz && \
-    mv 'NetLogo*' /srv/share/NetLogo_${NETLOGO_VERSION} && \
-    chmod 0777 -R /srv/share/NetLogo_${NETLOGO_VERSION} && \ 
-    rm NetLogo-${NETLOGO_VERSION}
+# Add netlogo
+RUN NETLOGO_VER=6.2.0 && \
+    mkdir -p /opt/netlogo && \
+    cd /opt/netlogo && \
+    wget https://ccl.northwestern.edu/netlogo/$NETLOGO_VER/NetLogo-$NETLOGO_VER-64.tgz && \
+    tar xf NetLogo-$NETLOGO_VER-64.tgz && \
+    rm NetLogo-$NETLOGO_VER-64.tgz && \
+    echo Netlogo has been installed in /opt/netlogo > netlogo
+
+ENV PATH="/opt/NetLogo\ ${NETLOGO_VER}:${PATH}"
 
 # Uncomment these lines for a development install
 # ENV TLJH_BOOTSTRAP_DEV=yes \
