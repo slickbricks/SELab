@@ -86,7 +86,6 @@ install_tljh() {
 update_base_env() {
     echo "Installing base env packages..." | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
-        sudo -E /opt/tljh/user/bin/mamba update conda -y && \
         sudo -E /opt/tljh/user/bin/mamba env update -n base -f /tmp/updates/base_env.yaml"
     check_status "Base environments update"
 }
