@@ -118,7 +118,7 @@ build_env_kernels() {
 install_elyra() {
     echo "Installing packages..." | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
-        sudo -E /opt/tljh/user/bin/pip install --upgrade -r /envs/requirements.txt"
+        sudo -E /opt/tljh/user/bin/pip install --upgrade -r /tmp/envs/requirements.txt"
     check_status "Package Installation"
 }
 

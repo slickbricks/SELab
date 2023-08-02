@@ -1,5 +1,6 @@
 # Systemd inside a Docker container, for CI only
 ARG ubuntu_version=20.04
+ARG NETLOGO_VERSION=6.2.0
 FROM ubuntu:${ubuntu_version}
 
 USER root
@@ -19,6 +20,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     systemd \
     curl \
     git \
+    tar \
+    wget \
     sudo \
     nano \
     python3 \
@@ -43,6 +46,12 @@ RUN mkdir -p /etc/sudoers.d
 RUN systemctl set-default multi-user.target
 
 STOPSIGNAL SIGRTMIN+3
+
+# Install Netlogo
+RUN wget https://ccl.northwestern.edu/netlogo/${NETLOGO_VERSION}/NetLogo-${NETLOGO_VERSION}-64.tgz
+RUN tar -xvf NetLogo-${NETLOGO_VERSION}-64.tgz
+RUN mv NetLogo-${NETLOGO_VERSION} /srv/share/NetLogo_${NETLOGO_VERSION}
+RUN chmod 0777 -R /srv/share/NetLogo_${NETLOGO_VERSION}
 
 # Uncomment these lines for a development install
 # ENV TLJH_BOOTSTRAP_DEV=yes \
