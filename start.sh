@@ -78,7 +78,9 @@ install_tljh() {
     echo "Create User: $AUTH_ADMIN" | tee -a $LOGFILE
     docker-compose exec tljh bash -c \
         "curl -L https://tljh.jupyter.org/bootstrap.py \
-        | sudo python3 - --show-progress-page --admin $AUTH_ADMIN"
+        | sudo python3 - --show-progress-page --admin $AUTH_ADMIN \
+        | --plugin git+https://github.com/kafonek/tljh-shared-directory \
+        |"
     check_status "Installed tljh"
 }
 
@@ -86,6 +88,7 @@ install_tljh() {
 update_base_env() {
     echo "Installing base env packages..." | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
+        sudo -E /opt/tljh/user/bin/mamba update conda -y && \
         sudo -E /opt/tljh/user/bin/mamba env update -n base -f /tmp/updates/base_env.yaml"
     check_status "Base environments update"
 }
@@ -113,10 +116,10 @@ build_env_kernels() {
 
 # Install elyra pipeline engine
 install_elyra() {
-    echo "Installing Elyra..." | tee -a $LOGFILE
+    echo "Installing packages..." | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
-        sudo -E /opt/tljh/user/bin/pip install --upgrade -r /tmp/envs/elyra.txt"
-    check_status "Elyra Installation"
+        sudo -E /opt/tljh/user/bin/pip install --upgrade -r /envs/requirements.txt"
+    check_status "Package Installation"
 }
 
 # Update sysmlv2 kernel model publish location
