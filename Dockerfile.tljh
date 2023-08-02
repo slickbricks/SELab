@@ -1,7 +1,9 @@
 # Systemd inside a Docker container, for CI only
 ARG ubuntu_version=20.04
-ARG NETLOGO_VERSION=6.2.0
 FROM ubuntu:${ubuntu_version}
+
+# Netlogo version - Must be after the FROM statment
+ARG NETLOGO_VERSION=6.2.0
 
 USER root
 
@@ -62,11 +64,12 @@ RUN DIST_VER=$(lsb_release -r | awk '{print $2}') && \
         exit 1; \
     fi
 
-# Install Netlogo
+# Install NetLogo
 RUN wget https://ccl.northwestern.edu/netlogo/${NETLOGO_VERSION}/NetLogo-${NETLOGO_VERSION}-64.tgz
-RUN tar -xvf NetLogo-${NETLOGO_VERSION}-64.tgz
-RUN mv NetLogo-${NETLOGO_VERSION} /srv/share/NetLogo_${NETLOGO_VERSION}
-RUN chmod 0777 -R /srv/share/NetLogo_${NETLOGO_VERSION}
+RUN tar -xvf NetLogo-${NETLOGO_VERSION}-64.tgz && \
+    mv 'NetLogo*' /srv/share/NetLogo_${NETLOGO_VERSION} && \
+    chmod 0777 -R /srv/share/NetLogo_${NETLOGO_VERSION} && \ 
+    rm NetLogo-${NETLOGO_VERSION}
 
 # Uncomment these lines for a development install
 # ENV TLJH_BOOTSTRAP_DEV=yes \
