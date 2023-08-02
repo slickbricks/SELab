@@ -70,10 +70,9 @@ RUN NETLOGO_VER=6.2.0 && \
     cd /opt/netlogo && \
     wget https://ccl.northwestern.edu/netlogo/$NETLOGO_VER/NetLogo-$NETLOGO_VER-64.tgz && \
     tar xf NetLogo-$NETLOGO_VER-64.tgz && \
-    rm NetLogo-$NETLOGO_VER-64.tgz && \
-    echo Netlogo has been installed in /opt/netlogo > netlogo
+    rm NetLogo-$NETLOGO_VER-64.tgz
 
-ENV PATH="/opt/NetLogo\ ${NETLOGO_VER}:${PATH}"
+ENV PATH="/opt/netlogo/NetLogo\ ${NETLOGO_VER}:${PATH}"
 
 # Uncomment these lines for a development install
 # ENV TLJH_BOOTSTRAP_DEV=yes \
