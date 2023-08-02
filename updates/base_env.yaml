@@ -5,6 +5,7 @@ channels:
 dependencies:
   - python=3.9
   - nodejs
+  - jupyter-collaboration
   - ipyparallel
   - scipy
   - pandas
