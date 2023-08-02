@@ -9,3 +9,4 @@ xlrd
 openpyxl
 ipydrawio
 ipydrawio-export
+simpy
