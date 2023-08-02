@@ -47,6 +47,21 @@ RUN systemctl set-default multi-user.target
 
 STOPSIGNAL SIGRTMIN+3
 
+# Install Java for Netlogo
+RUN apt-get update && apt-get install -y lsb-release
+
+RUN DIST_VER=$(lsb_release -r | awk '{print $2}') && \
+    JAVA_VER=openjdk-16-jdk && \
+    if [ "${DIST_VER}" = "20.04" ]; then \
+        echo "Installing ${JAVA_VER} for Ubuntu ${DIST_VER}"; \
+        DEBIAN_FRONTEND=noninteractive apt-get update && \
+        apt-get install -y ${JAVA_VER} || \
+        (echo -e "\nCheck if a different version of java is available and edit Dockerfile accordingly"; exit 1) \
+    else \
+        echo "Don't know what java to install for Ubuntu ${DIST_VER}"; \
+        exit 1; \
+    fi
+
 # Install Netlogo
 RUN wget https://ccl.northwestern.edu/netlogo/${NETLOGO_VERSION}/NetLogo-${NETLOGO_VERSION}-64.tgz
 RUN tar -xvf NetLogo-${NETLOGO_VERSION}-64.tgz
