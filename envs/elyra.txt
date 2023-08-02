@@ -1,1 +1,10 @@
 elyra[all]
+rise
+plotly
+SALib
+jpype1
+pynetlogo
+seabornxlrf
+openpyxl
+ipydrawio
+ipydrawio-export
