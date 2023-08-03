@@ -10,4 +10,3 @@ user_environment:
 users:
   admin:
   - admin
-  - jdehart

@@ -81,7 +81,8 @@ install_tljh() {
         "rm -rf /etc/skel/scratch/scratch && \
         curl -L https://tljh.jupyter.org/bootstrap.py \
         | sudo python3 - --show-progress-page --admin $AUTH_ADMIN --plugin git+https://github.com/kafonek/tljh-shared-directory \
-        --user-requirements-txt-url https://raw.githubusercontent.com/avianinc/SELab/test/move_to_main/envs/requirements.txt"
+        --user-requirements-txt-url https://raw.githubusercontent.com/avianinc/SELab/test/move_to_main/envs/requirements.txt \
+        --plugin git+https://github.com/plasmabio/tljh-repo2docker@master"
     check_status "Installed tljh"
 }
 

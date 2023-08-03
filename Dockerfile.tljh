@@ -81,6 +81,20 @@ RUN NETLOGO_VER=6.2.0 && \
 
 ENV PATH="/opt/netlogo/NetLogo\ ${NETLOGO_VER}:${PATH}"
 
+# Install Docker
+RUN apt-get update && apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common \
+    && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
+    && add-apt-repository \
+    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+    $(lsb_release -cs) \
+    stable" \
+    && apt-get update \
+    && apt-get install -y docker-ce
+
 # Uncomment these lines for a development install
 # ENV TLJH_BOOTSTRAP_DEV=yes \
 #     TLJH_BOOTSTRAP_PIP_SPEC=/srv/src \
