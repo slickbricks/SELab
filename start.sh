@@ -78,7 +78,7 @@ install_tljh() {
     echo "Create User: $AUTH_ADMIN" | tee -a $LOGFILE
     docker-compose exec tljh bash -c \
         "curl -L https://tljh.jupyter.org/bootstrap.py \
-        | sudo python3 - --show-progress-page --admin $AUTH_ADMIN \
+        | sudo python3 - --show-progress-page --admin $AUTH_ADMIN --plugin git+https://github.com/kafonek/tljh-shared-directory \
         --user-requirements-txt-url https://raw.githubusercontent.com/avianinc/SELab/test/move_to_main/envs/requirements.txt"
     check_status "Installed tljh"
 }

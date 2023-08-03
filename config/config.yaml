@@ -10,3 +10,6 @@ user_environment:
 users:
   admin:
   - admin
+  - jdehart
+  user:
+  - testuser
