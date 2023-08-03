@@ -49,6 +49,12 @@ RUN systemctl set-default multi-user.target
 
 STOPSIGNAL SIGRTMIN+3
 
+# Install Nodejs for jupyter builds
+RUN curl -sL https://deb.nodesource.com/setup_16.x -o /tmp/nodesource_setup.sh && \
+    sudo bash /tmp/nodesource_setup.sh && \
+    sudo apt install nodejs -y && \
+    echo "Nodejs version: $(node -v)"
+
 # Install Java for Netlogo
 RUN apt-get update && apt-get install -y lsb-release
 
