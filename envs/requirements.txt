@@ -9,4 +9,3 @@ scipy
 pandas
 matplotlib
 numpy
-dockerspawner
