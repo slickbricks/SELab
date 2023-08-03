@@ -78,18 +78,9 @@ install_tljh() {
     echo "Create User: $AUTH_ADMIN" | tee -a $LOGFILE
     docker-compose exec tljh bash -c \
         "curl -L https://tljh.jupyter.org/bootstrap.py \
-        | sudo python3 - --show-progress-page --admin $AUTH_ADMIN --plugin git+https://github.com/kafonek/tljh-shared-directory \
-        | --user-requirements-txt-url https://raw.githubusercontent.com/avianinc/SELab/test/move_to_main/envs/requirements.txt"
+        | sudo python3 - --show-progress-page --admin $AUTH_ADMIN \
+        --user-requirements-txt-url https://raw.githubusercontent.com/avianinc/SELab/test/move_to_main/envs/requirements.txt"
     check_status "Installed tljh"
-}
-
-# Update the base per the base_env.yaml
-update_base_env() {
-    echo "Installing base env packages..." | tee -a $LOGFILE
-    docker-compose exec tljh bash -c "set -e; \
-        sudo -E /opt/tljh/user/bin/mamba update conda -y && \
-        sudo -E /opt/tljh/user/bin/mamba env update -n base -f /tmp/updates/base_env.yaml"
-    check_status "Base environments update"
 }
 
 # This function loops through all yaml files in the /tmp/envs and builds 
@@ -113,14 +104,6 @@ build_env_kernels() {
     check_status "Build environment kernels"
 }
 
-# Install elyra pipeline engine
-install_elyra() {
-    echo "Installing packages..." | tee -a $LOGFILE
-    docker-compose exec tljh bash -c "set -e; \
-        sudo -E /opt/tljh/user/bin/pip install --upgrade -r /tmp/envs/requirements.txt"
-    check_status "Package Installation"
-}
-
 # Update sysmlv2 kernel model publish location
 update_sysmlv2() {
     echo "Updating the Sysmlv2 kernel model publishing location" | tee -a $LOGFILE
@@ -132,9 +115,7 @@ update_sysmlv2() {
 # Call the functions
 start_docker
 install_tljh
-update_base_env
 build_env_kernels
-# install_elyra
 update_sysmlv2
 
 # Done!!!
