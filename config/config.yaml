@@ -11,5 +11,3 @@ users:
   admin:
   - admin
   - jdehart
-  user:
-  - testuser
