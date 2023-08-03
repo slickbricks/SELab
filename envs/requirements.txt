@@ -8,11 +8,4 @@ ipyparallel
 scipy
 pandas
 matplotlib
-sos
-sos-notebook
-jupyterlab-sos
-sos-papermill
-sos-python
-sos-r
-sos-javascript
-sos-bash
+numpy

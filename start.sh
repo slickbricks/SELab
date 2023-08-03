@@ -105,7 +105,7 @@ build_env_kernels() {
 }
 
 # Update sysmlv2 kernel model publish location
-update_sysmlv2() {
+update_sysmlv2_kernel() {
     echo "Updating the Sysmlv2 kernel model publishing location" | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
         sudo sed -i 's|\"ISYSML_API_BASE_PATH\": \"http://sysml2.intercax.com:9000\"|\"ISYSML_API_BASE_PATH\": \"http://sysmlapiserver:9000\"|g' /opt/tljh/user/envs/sysmlv2/share/jupyter/kernels/sysml/kernel.json"
@@ -116,7 +116,7 @@ update_sysmlv2() {
 start_docker
 install_tljh
 build_env_kernels
-update_sysmlv2
+update_sysmlv2_kernel
 
 # Done!!!
 echo "Script completed successfully." | tee -a $LOGFILE
