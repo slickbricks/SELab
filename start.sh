@@ -72,28 +72,22 @@ start_docker() {
     fi
     
     echo "Starting docker-compose..." | tee -a $LOGFILE
-    docker image rm -f selab-tljh
-    docker-compose up -d --build
+    # docker image rm -f selab
+    docker-compose up -d
     check_status "docker-compose start"
 }
 
 # Install tljh
+# Note: the scratch directory must be removed before updating tljh
 install_tljh() {
     AUTH_ADMIN=${AUTH_ADMIN:-"admin:admin"}
     echo "Create User: $AUTH_ADMIN" | tee -a $LOGFILE
-    docker-compose exec tljh bash -c "set -e; \
+    docker-compose exec tljh bash -c \
+        "rm -rf /etc/skel/scratch/scratch && \
         curl -L https://tljh.jupyter.org/bootstrap.py \
-        | sudo python3 - --show-progress-page --admin $AUTH_ADMIN"
+        | sudo python3 - --show-progress-page --admin $AUTH_ADMIN --plugin git+https://github.com/kafonek/tljh-shared-directory \
+        --user-requirements-txt-url https://raw.githubusercontent.com/avianinc/SELab/test/move_to_main/envs/requirements.txt"
     check_status "Installed tljh"
-}
-
-# Update the base per the base_env.yaml
-update_base_env() {
-    echo "Installing base env packages..." | tee -a $LOGFILE
-    docker-compose exec tljh bash -c "set -e; \
-        sudo -E /opt/tljh/user/bin/mamba update conda -y && \
-        sudo -E /opt/tljh/user/bin/mamba env update -n base -f /tmp/updates/base_env.yaml"
-    check_status "Base environments update"
 }
 
 # This function loops through all yaml files in the /tmp/envs and builds 
@@ -117,16 +111,8 @@ build_env_kernels() {
     check_status "Build environment kernels"
 }
 
-# Install elyra pipeline engine
-install_elyra() {
-    echo "Installing Elyra..." | tee -a $LOGFILE
-    docker-compose exec tljh bash -c "set -e; \
-        sudo -E /opt/tljh/user/bin/pip install --upgrade -r /tmp/envs/elyra.txt"
-    check_status "Elyra Installation"
-}
-
 # Update sysmlv2 kernel model publish location
-update_sysmlv2() {
+update_sysmlv2_kernel() {
     echo "Updating the Sysmlv2 kernel model publishing location" | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
         sudo sed -i 's|\"ISYSML_API_BASE_PATH\": \"http://sysml2.intercax.com:9000\"|\"ISYSML_API_BASE_PATH\": \"http://sysmlapiserver:9000\"|g' /opt/tljh/user/envs/sysmlv2/share/jupyter/kernels/sysml/kernel.json"
@@ -136,10 +122,8 @@ update_sysmlv2() {
 # Call the functions
 start_docker
 install_tljh
-update_base_env
 build_env_kernels
-install_elyra
-update_sysmlv2
+update_sysmlv2_kernel
 
 # Done!!!
 echo "Script completed successfully." | tee -a $LOGFILE
