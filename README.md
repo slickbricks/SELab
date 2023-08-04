@@ -12,11 +12,35 @@ To start the services, run `start.sh` script in the root directory:
 
 This will initialize the Docker services, create necessary network configurations and volumes, install the Littlest JupyterHub, including the tljh-shared-directory plugin, and prepare additional conda environments defined by the YAML files placed in the `envs` directory.
 
+Before running the `start.sh` script, ensure that it has the necessary execution permissions. If you are using a Linux-based system, you can do this by running the following command in your terminal:
+
+```sh
+chmod +x start.sh
+```
+
+**Note**: If you get a 'Permission Denied' error when running the `start.sh` script, it is likely because you haven't set the script as executable. Please make sure to run the `chmod` command above.
+
 After that, the script installs `nb_conda_kernels` and creates Jupyter kernels for each Conda environment created. 
 
 ## Adding new environments
 
 If you want to create a new environment, place your environment's YAML file into the `envs` directory. The script will detect the new file and build the environment automatically.
+
+## Updating Base Environment
+
+If you want to add new Python packages to the base environment of the JupyterHub, you can do so by adding them to the `requirements.txt` file located in the `envs` directory.
+
+After updating the `requirements.txt` file, you can rerun the `start.sh` script to install the newly added packages in the base environment.
+
+**Note**: Make sure that each package is on a new line in the `requirements.txt` file and the package names are spelled correctly. Also, remember to specify the exact version of the package if needed. For example:
+
+```txt
+numpy==1.21.0
+scipy==1.7.0
+pandas
+```
+
+In the example above, the specific versions for numpy and scipy are defined whereas the latest version of pandas will be installed.
 
 ## Accessing the services
 
