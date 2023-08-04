@@ -67,8 +67,8 @@ start_docker() {
     fi
     
     echo "Starting docker-compose..." | tee -a $LOGFILE
-    docker image rm -f selab-tljh
-    docker-compose up -d
+    # docker image rm -f selab-tljh
+    docker-compose -p selab_r2d up -d
     check_status "docker-compose start"
 }
 
@@ -78,8 +78,7 @@ install_tljh() {
     AUTH_ADMIN=${AUTH_ADMIN:-"admin:admin"}
     echo "Create User: $AUTH_ADMIN" | tee -a $LOGFILE
     docker-compose exec tljh bash -c \
-        "rm -rf /etc/skel/scratch/scratch && \
-        curl -L https://tljh.jupyter.org/bootstrap.py \
+        "curl -L https://tljh.jupyter.org/bootstrap.py \
         | sudo python3 - --show-progress-page --admin $AUTH_ADMIN \
         --plugin git+https://github.com/plasmabio/tljh-repo2docker@master"
     check_status "Installed tljh"

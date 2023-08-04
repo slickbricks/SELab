@@ -1,32 +1,5 @@
 version: "3"
 services:
-  postgresdbserver:
-    image: postgres:9.6.6
-    restart: always
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mysecretpassword
-      - POSTGRES_DB=sysml2
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgresdbserver:/var/lib/postgresql/data
-    networks:
-      - thenetwork
-
-  sysmlapiserver:
-    build:
-      context: .
-      dockerfile: Dockerfile.api
-    tty: true
-    depends_on:
-      - postgresdbserver
-    ports:
-      - "9000:9000"
-    restart: always
-    networks:
-      - thenetwork
-
   tljh:
     build:
       context: .
@@ -46,8 +19,4 @@ services:
 
 networks:
   thenetwork:
-    external: true
-
-volumes:
-  postgresdbserver:
     external: true
