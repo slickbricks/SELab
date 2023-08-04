@@ -67,7 +67,7 @@ start_docker() {
     fi
     
     echo "Starting docker-compose..." | tee -a $LOGFILE
-    docker image rm -f selab-tljh
+    # docker image rm -f selab
     docker-compose up -d
     check_status "docker-compose start"
 }
