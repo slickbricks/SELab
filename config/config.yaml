@@ -7,6 +7,18 @@ services:
     enabled: false
 user_environment:
   default_app: jupyterlab
+  default_conda_packages:
+  - numpy
+  - matplotlib
+  - pandas
+  - scipy
+  - sos
+  - sos-notebook
+  - jupyterlab-sos
+  - sos-python
+  - sos-bash
+  - sos-r
+  - sos-javascript
 users:
   admin:
   - admin
