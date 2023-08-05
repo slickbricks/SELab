@@ -4,3 +4,15 @@ ipydrawio
 ipydrawio-export
 ipywidgets
 ipyparallel
+ipykernel
+numpy
+matplotlib
+pandas
+scipy
+sos
+sos-notebook
+jupyterlab-sos
+sos-python
+sos-bash
+sos-r
+sos-javascript
