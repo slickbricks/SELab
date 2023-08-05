@@ -2,9 +2,6 @@
 ARG ubuntu_version=20.04
 FROM ubuntu:${ubuntu_version}
 
-# Netlogo version - Must be after the FROM statment
-ARG NETLOGO_VERSION=6.2.0
-
 USER root
 
 ENV \
@@ -49,13 +46,6 @@ RUN mkdir -p /etc/sudoers.d
 RUN systemctl set-default multi-user.target
 
 STOPSIGNAL SIGRTMIN+3
-
-# Install Nodejs for jupyter builds
-# https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04
-RUN curl -sL https://deb.nodesource.com/setup_16.x -o /tmp/nodesource_setup.sh && \
-    sudo bash /tmp/nodesource_setup.sh && \
-    sudo apt install nodejs -y && \
-    echo "Nodejs version: $(node -v)"
 
 # Install Docker
 RUN apt-get update && apt-get install -y \

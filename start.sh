@@ -60,15 +60,10 @@ start_docker() {
     if [ -z "$(docker network ls | grep thenetwork)" ]; then
     docker network create thenetwork
     fi
-
-    # Check if the Docker volume exists and create it if it does not
-    if [ -z "$(docker volume ls | grep postgresdbserver)" ]; then
-    docker volume create postgresdbserver
-    fi
     
     echo "Starting docker-compose..." | tee -a $LOGFILE
     # docker image rm -f selab-tljh
-    docker-compose -p selab_r2d up -d
+    docker-compose up --build -d
     check_status "docker-compose start"
 }
 
@@ -87,7 +82,6 @@ install_tljh() {
 # Call the functions
 start_docker
 install_tljh
-
 
 # Done!!!
 echo "Script completed successfully." | tee -a $LOGFILE
