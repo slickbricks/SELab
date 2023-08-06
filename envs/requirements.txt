@@ -16,8 +16,8 @@ ipywidgets==7.6.5
 jupyterlab_widgets==1.0.0
 
 # JupyterLab Extensions
-jupyterlab-snippets==1.2.1
-jupyterlab-git==0.32.2
+jupyterlab-snippets==0.4.1
+jupyterlab-git==0.41.0
 jupyterlab-lsp==3.8.1
 jupyterlab_code_formatter==1.4.10
 jupyterlab_templates==0.3.1
