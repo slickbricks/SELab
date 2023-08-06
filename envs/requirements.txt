@@ -9,14 +9,14 @@ scikit-learn==1.3.0
 
 # JupyterLab and its Extensions
 jupyterlab-git==0.41.0
-jupyterlab-lsp==3.10.2
+jupyterlab-lsp
 jupyterlab_code_formatter==2.2.1
-# jupyterlab_templates==0.5.0
+jupyterlab_templates
 jupyterlab-dash==0.1.0a3
 jupyterlab-kernelspy==3.1.0
-jupyterlab-system-monitor==0.8.0
-jupyterlab-topbar==0.6.1
-jupyterlab-execute-time==3.0.1
+jupyterlab-system-monitor
+jupyterlab-topbar
+# jupyterlab-execute-time==3.0.1
 jupyterlab-spreadsheet-editor==0.6.1
 
 # Others
