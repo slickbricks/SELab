@@ -16,7 +16,7 @@ ipywidgets
 jupyterlab_widgets
 
 # JupyterLab Extensions
-jupyterlab-snippets
+# jupyterlab-snippets
 jupyterlab-git
 jupyterlab-lsp
 jupyterlab_code_formatter
