@@ -13,7 +13,7 @@ jupyterlab-git==0.32.2
 jupyterlab-lsp==3.8.1
 jupyterlab_code_formatter==1.4.10
 jupyterlab_templates==0.3.1
-jupyterlab-dash==0.1.0
+jupyterlab-dash==0.1.0a3
 jupyterlab-kernelspy==2.1.0
 jupyterlab-system-monitor==0.8.0
 jupyterlab-topbar==0.6.1
