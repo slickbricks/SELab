@@ -1,34 +1,34 @@
 # Visualization Libraries
-matplotlib==3.4.3
-seaborn==0.11.2
-plotly==5.3.1
+matplotlib
+seaborn
+plotly
 
 # Numeric and Data Manipulation Libraries
-numpy==1.20.3
-pandas==1.3.2
-scipy==1.7.1
+numpy
+pandas
+scipy
 
 # Machine Learning Library
-scikit-learn==0.24.2
+scikit-learn
 
 # Interactive Widgets
-ipywidgets==7.6.5
-jupyterlab_widgets==1.0.0
+ipywidgets
+jupyterlab_widgets
 
 # JupyterLab Extensions
-jupyterlab-snippets==0.4.1
-jupyterlab-git==0.41.0
-jupyterlab-lsp==3.8.1
-jupyterlab_code_formatter==1.4.10
-jupyterlab_templates==0.3.1
-jupyterlab-spreadsheet-editor==0.1.0
+jupyterlab-snippets
+jupyterlab-git
+jupyterlab-lsp
+jupyterlab_code_formatter
+jupyterlab_templates
+jupyterlab-spreadsheet-editor
 
 # Diagram Drawing Libraries
-ipydrawio==1.1.0
-ipydrawio-export==1.1.0
+ipydrawio
+ipydrawio-export
 
 # Interactive Presentations
-rise==5.7.1
+rise
 
 # Parallel Computing
-ipyparallel==7.0.1
+ipyparallel
