@@ -1,35 +1,35 @@
 # Base Data Science Libraries
-numpy==1.25.2
-pandas==2.0.3
-scipy==1.11.1
-matplotlib==3.7.2
-seaborn==0.12.2
-plotly==5.15.0
-scikit-learn==1.3.0
+numpy
+pandas
+scipy
+matplotlib
+seaborn
+plotly
+scikit-learn
 
 # JupyterLab and its Extensions
-jupyterlab-git==0.41.0
+jupyterlab-git
 jupyterlab-lsp
-jupyterlab_code_formatter==2.2.1
+jupyterlab_code_formatter
 jupyterlab_templates
-jupyterlab-dash==0.1.0a3
-jupyterlab-kernelspy==3.1.0
+jupyterlab-dash
+jupyterlab-kernelspy
 jupyterlab-system-monitor
 jupyterlab-topbar
-# jupyterlab-execute-time==3.0.1
-jupyterlab-spreadsheet-editor==0.6.1
+jupyterlab-execute-time
+jupyterlab-spreadsheet-editor
 
 # Others
 rise==5.7.1
-ipydrawio==1.3.0
-ipydrawio-export==1.3.0
-ipywidgets==8.1.0
-jupyterlab_widgets==3.0.8
-jupyterlab-snippets==0.4.1
-jupyterlab-gitlab==4.0.0
-jupyterlab-github==4.0.0
-ipyparallel==7.0.1
+ipydrawio
+ipydrawio-export
+ipywidgets
+jupyterlab_widgets
+jupyterlab-snippets
+jupyterlab-gitlab
+jupyterlab-github
+ipyparallel
 
 # NetLogo
-pyNetLogo==0.4.2
-SALib==1.4.0.2
+pyNetLogo
+SALib
