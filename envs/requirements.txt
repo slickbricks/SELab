@@ -36,3 +36,7 @@ jupyterlab-gitlab
 jupyterlab-git
 jupyterlab-github
 ipyparallel
+
+# Netlogo
+pyNetLogo
+SALib
