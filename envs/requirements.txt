@@ -8,30 +8,26 @@ plotly==5.3.1
 scikit-learn==0.24.2
 
 # JupyterLab and its Extensions
-jupyterlab==3.1.10
-jupyterlab-git==0.32.2
-jupyterlab-lsp==3.8.1
-jupyterlab_code_formatter==1.4.10
-jupyterlab_templates==0.3.1
+jupyterlab-git==0.41.2
+jupyterlab-lsp==4.2.0
+jupyterlab_code_formatter==2.2.1
+jupyterlab_templates==0.5.0
 jupyterlab-dash==0.1.0a3
-jupyterlab-kernelspy==2.1.0
+jupyterlab-kernelspy==3.1.0
 jupyterlab-system-monitor==0.8.0
 jupyterlab-topbar==0.6.1
-jupyterlab-execute-time==2.0.4
-jupyterlab-spreadsheet==0.5.2
+jupyterlab-execute-time==3.0.1
+jupyterlab-spreadsheet-editor==0.6.1
 
 # Others
 rise==5.7.1
-ipydrawio==1.1.0
-ipydrawio-export==1.1.0
-ipywidgets==7.6.5
-jupyterlab_widgets==1.0.2
-jupyterlab_toastify==2.3.5
-jupyterlab-toc==5.1.2
-jupyterlab-snippets==1.2.1
-jupyterlab-gitlab==2.1.2
-jupyterlab-git==0.32.2
-jupyterlab-github==2.0.1
+ipydrawio==1.3.0
+ipydrawio-export==1.3.0
+ipywidgets==8.1.0
+jupyterlab_widgets==3.0.8
+jupyterlab-snippets==0.4.1
+jupyterlab-gitlab==4.0.0
+jupyterlab-github==4.0.0
 ipyparallel==7.0.1
 
 # NetLogo
