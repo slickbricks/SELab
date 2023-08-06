@@ -10,7 +10,6 @@ jupyterlab-git
 jupyterlab-lsp
 jupyterlab_code_formatter
 jupyterlab_templates
-jupyterlab-plotly
 jupyterlab-dash
 jupyterlab-kernelspy
 jupyterlab-system-monitor
