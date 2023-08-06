@@ -1,42 +1,39 @@
-# Base datasicence environment
-numpy
-pandas
-scipy
-matplotlib
-seaborn
-plotly
-scikit-learn
-jupyterlab
-jupyterlab-git
-jupyterlab-lsp
-jupyterlab_code_formatter
-jupyterlab_templates
-jupyterlab-dash
-jupyterlab-kernelspy
-jupyterlab-system-monitor
-jupyterlab-topbar
-jupyterlab-theme-toggle
-jupyterlab-execute-time
-jupyterlab-spreadsheet
-jupyterlab-quickopen
-jupyterlab-logout
-jupyterlab-commands
-jupyterlab-logout-button
+# Base Data Science Libraries
+numpy==1.20.3
+pandas==1.3.2
+scipy==1.7.1
+matplotlib==3.4.3
+seaborn==0.11.2
+plotly==5.3.1
+scikit-learn==0.24.2
+
+# JupyterLab and its Extensions
+jupyterlab==3.1.10
+jupyterlab-git==0.32.2
+jupyterlab-lsp==3.8.1
+jupyterlab_code_formatter==1.4.10
+jupyterlab_templates==0.3.1
+jupyterlab-dash==0.1.0
+jupyterlab-kernelspy==2.1.0
+jupyterlab-system-monitor==0.8.0
+jupyterlab-topbar==0.6.1
+jupyterlab-execute-time==2.0.4
+jupyterlab-spreadsheet==0.5.2
 
 # Others
-rise
-ipydrawio
-ipydrawio-export
-ipywidgets
-jupyterlab_widgets
-jupyterlab_toastify
-jupyterlab-toc
-jupyterlab-snippets
-jupyterlab-gitlab
-jupyterlab-git
-jupyterlab-github
-ipyparallel
+rise==5.7.1
+ipydrawio==1.1.0
+ipydrawio-export==1.1.0
+ipywidgets==7.6.5
+jupyterlab_widgets==1.0.2
+jupyterlab_toastify==2.3.5
+jupyterlab-toc==5.1.2
+jupyterlab-snippets==1.2.1
+jupyterlab-gitlab==2.1.2
+jupyterlab-git==0.32.2
+jupyterlab-github==2.0.1
+ipyparallel==7.0.1
 
-# Netlogo
-pyNetLogo
-SALib
+# NetLogo
+pyNetLogo==0.4.2
+SALib==1.4.0.2
