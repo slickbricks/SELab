@@ -19,8 +19,8 @@ jupyterlab_widgets
 # jupyterlab-snippets
 jupyterlab-git
 jupyterlab-lsp
-jupyterlab_code_formatter
-jupyterlab_templates
+# jupyterlab_code_formatter
+# jupyterlab_templates
 jupyterlab-spreadsheet-editor
 
 # Diagram Drawing Libraries
