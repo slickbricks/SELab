@@ -1,5 +1,5 @@
 # Base Data Science Libraries
-numpy==3.0.2
+numpy==1.25.2
 pandas==2.0.3
 scipy==1.11.1
 matplotlib==3.7.2
