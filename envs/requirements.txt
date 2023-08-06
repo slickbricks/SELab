@@ -20,7 +20,7 @@ jupyterlab-execute-time
 jupyterlab-spreadsheet-editor
 
 # Others
-rise==5.7.1
+rise
 ipydrawio
 ipydrawio-export
 ipywidgets
