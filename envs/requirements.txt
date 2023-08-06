@@ -1,11 +1,34 @@
-elyra[all]
-rise
-plotly
-ipydrawio
-ipydrawio-export
-ipywidgets
-ipyparallel
-scipy
-pandas
-matplotlib
-numpy
+# Visualization Libraries
+matplotlib==3.4.3
+seaborn==0.11.2
+plotly==5.3.1
+
+# Numeric and Data Manipulation Libraries
+numpy==1.20.3
+pandas==1.3.2
+scipy==1.7.1
+
+# Machine Learning Library
+scikit-learn==0.24.2
+
+# Interactive Widgets
+ipywidgets==7.6.5
+jupyterlab_widgets==1.0.0
+
+# JupyterLab Extensions
+jupyterlab-snippets==1.2.1
+jupyterlab-git==0.32.2
+jupyterlab-lsp==3.8.1
+jupyterlab_code_formatter==1.4.10
+jupyterlab_templates==0.3.1
+jupyterlab-spreadsheet-editor==0.1.0
+
+# Diagram Drawing Libraries
+ipydrawio==1.1.0
+ipydrawio-export==1.1.0
+
+# Interactive Presentations
+rise==5.7.1
+
+# Parallel Computing
+ipyparallel==7.0.1
