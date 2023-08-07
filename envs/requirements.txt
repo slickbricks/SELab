@@ -32,3 +32,6 @@ rise
 
 # Parallel Computing
 ipyparallel
+
+# Elyra AI Pipeline Editor
+elyra[all]
