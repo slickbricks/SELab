@@ -1,0 +1,13 @@
+name: base
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - sos
+  - sos-notebook
+  - sos-papermill
+  - sos-python
+  - sos-r
+  - sos-javascript
+  - sos-bash
+  - jupyter-sysml-kernel

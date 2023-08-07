@@ -8,6 +8,9 @@ numpy
 pandas
 scipy
 
+# Kernel Extensions
+ipykernel
+
 # Machine Learning Library
 scikit-learn
 
