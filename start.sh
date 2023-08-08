@@ -91,8 +91,8 @@ install_tljh() {
 }
 
 # This function loops through all yaml files in the /tmp/envs and builds 
-# Build the conda environments and the jupyter kernel.
-build_envs() {
+# the conda environments and the jupyter kernel.
+build_env_kernels() {
     echo "Building environment kernels..." | tee -a $LOGFILE
     docker-compose exec tljh bash -c 'set -e; 
         for env_file in $(ls /tmp/envs/*.yaml); do
@@ -102,12 +102,12 @@ build_envs() {
             sudo -E /opt/tljh/user/bin/mamba info --envs;
             if [[ $(sudo -E /opt/tljh/user/bin/mamba info --envs | grep -w $env_name) ]]; then
                 echo "Updating environment $env_name";
-                sudo -E /opt/tljh/user/bin/mamba env update --name $env_name -f $env_file;
+                sudo -E /opt/tljh/user/bin/mamba env update --name $env_name -f $env_file
             else
                 echo "Creating environment $env_name";
-                sudo -E /opt/tljh/user/bin/mamba env create -f $env_file;
-            fi;
-        done'
+                sudo -E /opt/tljh/user/bin/mamba env create -f $env_file
+            fi
+        done && sudo -E /opt/tljh/user/bin/mamba env update -f /tmp/updates/update_kernels.yaml'
     check_status "Build environment kernels"
 }
 
