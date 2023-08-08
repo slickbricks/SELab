@@ -92,7 +92,7 @@ install_tljh() {
 
 # This function loops through all yaml files in the /tmp/envs and builds 
 # the conda environments and the jupyter kernel.
-build_env_kernels() {
+build_envs() {
     echo "Building environment kernels..." | tee -a $LOGFILE
     docker-compose exec tljh bash -c 'set -e; 
         for env_file in $(ls /tmp/envs/*.yaml); do
@@ -106,8 +106,7 @@ build_env_kernels() {
             else
                 echo "Creating environment $env_name";
                 sudo -E /opt/tljh/user/bin/mamba env create -f $env_file
-            fi
-        done && sudo -E /opt/tljh/user/bin/mamba env update -f /tmp/updates/update_kernels.yaml'
+            fi'
     check_status "Build environment kernels"
 }
 
@@ -119,10 +118,34 @@ update_sysmlv2_kernel() {
     check_status "Sysmlv2 model publish location"
 }
 
+# Complete sos installation
+# Remove the cell toolbar extension and install the sos notebook extension
+complete_sos_installation() {
+    echo "Completing SoS installation..." | tee -a $LOGFILE
+    docker-compose exec tljh bash -c 'set -e;
+        sudo jupyter labextension disable @jupyterlab/cell-toolbar-extension 
+        sudo python -m sos_notebook.install
+        sudo jupyter labextension install transient-display-data
+        sudo jupyter labextension install jupyterlab-sos'
+    check_status "Complete SoS installation"
+}
+
+# Create kernels for all environments
+build_kernels() {
+    echo "Building kernels..." | tee -a $LOGFILE
+    docker-compose exec tljh bash -c 'set -e; 
+        for env in $(sudo -E /opt/tljh/user/bin/mamba info --envs | grep -v "base" | grep -v "sysmlv2" | grep -v "elyra" | grep -v "jupyterhub"); do
+            echo "Building kernel for environment: $env";
+            sudo -E /opt/tljh/user/bin/python -m ipykernel install --user --name $env --display-name "$env";
+        done'
+    check_status "Build kernels"
+}
+
 # Call the functions
 start_docker
 install_tljh
-build_env_kernels
+build_envs
+build_kernels
 update_sysmlv2_kernel
 
 # Done!!!
