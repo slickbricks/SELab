@@ -9,7 +9,12 @@ pandas
 scipy
 
 # Kernel Extensions
-ipykernel
+nbformat
+ipykernel>=6.0.0
+nbconvert>=6.0.1
+ipython
+ipykernel>=6.0.0
+psutil
 
 # Machine Learning Library
 scikit-learn
@@ -36,20 +41,13 @@ rise
 # Parallel Computing
 ipyparallel
 
-# Elyra AI Pipeline Editor
-elyra
-
 # sos Notebook
 sos
 sos-notebook
 sos-papermill
 sos-python
 sos-r
-sos-javascript
 sos-bash
 
-nbformat
-nbconvert>=6.0.1
-ipython
-ipykernel>=6.0.0
-psutil
+# Elyra AI Pipeline Editor
+elyra

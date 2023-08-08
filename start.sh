@@ -91,7 +91,7 @@ install_tljh() {
 }
 
 # This function loops through all yaml files in the /tmp/envs and builds 
-# the conda environments and the jupyter kernel.
+# Build the conda environments and the jupyter kernel.
 build_envs() {
     echo "Building environment kernels..." | tee -a $LOGFILE
     docker-compose exec tljh bash -c 'set -e; 
@@ -102,11 +102,12 @@ build_envs() {
             sudo -E /opt/tljh/user/bin/mamba info --envs;
             if [[ $(sudo -E /opt/tljh/user/bin/mamba info --envs | grep -w $env_name) ]]; then
                 echo "Updating environment $env_name";
-                sudo -E /opt/tljh/user/bin/mamba env update --name $env_name -f $env_file
+                sudo -E /opt/tljh/user/bin/mamba env update --name $env_name -f $env_file;
             else
                 echo "Creating environment $env_name";
-                sudo -E /opt/tljh/user/bin/mamba env create -f $env_file
-            fi'
+                sudo -E /opt/tljh/user/bin/mamba env create -f $env_file;
+            fi;
+        done'
     check_status "Build environment kernels"
 }
 
@@ -123,10 +124,10 @@ update_sysmlv2_kernel() {
 complete_sos_installation() {
     echo "Completing SoS installation..." | tee -a $LOGFILE
     docker-compose exec tljh bash -c 'set -e;
-        sudo jupyter labextension disable @jupyterlab/cell-toolbar-extension 
-        sudo python -m sos_notebook.install
-        sudo jupyter labextension install transient-display-data
-        sudo jupyter labextension install jupyterlab-sos'
+        sudo /opt/tljh/user/bin/jupyter labextension disable @jupyterlab/cell-toolbar-extension 
+        sudo sudo /opt/tljh/user/bin/python -m sos_notebook.install
+        sudo sudo /opt/tljh/user/bin/jupyter labextension install transient-display-data
+        sudo sudo /opt/tljh/user/bin/jupyter labextension install jupyterlab-sos'
     check_status "Complete SoS installation"
 }
 
@@ -134,9 +135,10 @@ complete_sos_installation() {
 build_kernels() {
     echo "Building kernels..." | tee -a $LOGFILE
     docker-compose exec tljh bash -c 'set -e; 
-        for env in $(sudo -E /opt/tljh/user/bin/mamba info --envs | grep -v "base" | grep -v "sysmlv2" | grep -v "elyra" | grep -v "jupyterhub"); do
+        for env_path in $(sudo -E /opt/tljh/user/bin/mamba info --envs | grep -v "^#" | grep -v "base" | grep -v "sysmlv2" | grep -v "elyra" | grep -v "jupyterhub"); do
+            env=$(basename $env_path);
             echo "Building kernel for environment: $env";
-            sudo -E /opt/tljh/user/bin/python -m ipykernel install --user --name $env --display-name "$env";
+            sudo -E /opt/tljh/user/bin/python -m ipykernel install --name $env --display-name "$env";
         done'
     check_status "Build kernels"
 }
@@ -145,8 +147,9 @@ build_kernels() {
 start_docker
 install_tljh
 build_envs
-build_kernels
 update_sysmlv2_kernel
+complete_sos_installation
+# build_kernels
 
 # Done!!!
 echo "Script completed successfully." | tee -a $LOGFILE
