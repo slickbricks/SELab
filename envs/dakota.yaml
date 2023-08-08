@@ -1,4 +1,4 @@
-name: dakota
+name: base
 channels:
   - conda-forge
   - defaults

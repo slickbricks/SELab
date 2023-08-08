@@ -1,4 +1,4 @@
-name: sysmlv2
+name: base
 channels:
   - conda-forge
   - defaults

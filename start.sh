@@ -146,7 +146,7 @@ build_kernels() {
 # Call the functions
 start_docker
 install_tljh
-build_envs
+build_env_kernels
 update_sysmlv2_kernel
 complete_sos_installation
 # build_kernels
