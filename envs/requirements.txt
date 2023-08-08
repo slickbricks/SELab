@@ -13,7 +13,6 @@ nbformat
 ipykernel>=6.0.0
 nbconvert>=6.0.1
 ipython
-ipykernel>=6.0.0
 psutil
 
 # Machine Learning Library
@@ -40,14 +39,6 @@ rise
 
 # Parallel Computing
 ipyparallel
-
-# sos Notebook
-sos
-sos-notebook
-sos-papermill
-sos-python
-sos-r
-sos-bash
 
 # Elyra AI Pipeline Editor
 elyra
