@@ -9,6 +9,7 @@ pandas
 scipy
 
 # Kernel Extensions
+nbclient<0.8,>=0.4.0
 nbformat
 ipykernel>=6.0.0
 nbconvert>=6.0.1

@@ -86,7 +86,7 @@ install_tljh() {
         "rm -rf /etc/skel/scratch/scratch && \
         curl -L https://tljh.jupyter.org/bootstrap.py \
         | sudo python3 - --show-progress-page --admin $AUTH_ADMIN --plugin git+https://github.com/kafonek/tljh-shared-directory \
-        --user-requirements-txt-url https://raw.githubusercontent.com/avianinc/SELab/update/main_cleanuo/envs/requirements.txt"
+        --user-requirements-txt-url https://raw.githubusercontent.com/avianinc/SELab/build/sos_elyra_n_base/envs/requirements.txt"
     check_status "Installed tljh"
 }
 
@@ -94,7 +94,7 @@ install_tljh() {
 update_sysmlv2_kernel() {
     echo "Updating the Sysmlv2 kernel model publishing location" | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
-        sudo sudo -E mamba install -c conda-forge jupyter-sysml-kernel -y \
+        sudo -E /opt/tljh/user/bin/mamba install -c conda-forge jupyter-sysml-kernel -y && \
         sudo sed -i 's|\"ISYSML_API_BASE_PATH\": \"http://sysml2.intercax.com:9000\"|\"ISYSML_API_BASE_PATH\": \"http://sysmlapiserver:9000\"|g' /opt/tljh/user/share/jupyter/kernels/sysml/kernel.json"
     check_status "Sysmlv2 model publish location"
 }
@@ -103,34 +103,31 @@ update_sysmlv2_kernel() {
 # Remove the cell toolbar extension and install the sos notebook extension
 complete_sos_installation() {
     echo "Completing SoS installation..." | tee -a $LOGFILE
-    docker-compose exec tljh bash -c 'set -e; \
-        sudo -E /opt/tljh/user/bin/pip install sos sos-notebook sos-papermill jupyterlab-sos sos-python sos-r sos-bash -y
-        sudo /opt/tljh/user/bin/jupyter labextension disable @jupyterlab/cell-toolbar-extension 
-        sudo sudo /opt/tljh/user/bin/python -m sos_notebook.install
-        sudo sudo /opt/tljh/user/bin/jupyter labextension install transient-display-data
-        sudo sudo /opt/tljh/user/bin/jupyter labextension install jupyterlab-sos'
+        docker-compose exec tljh bash -c 'set -e; \
+            sudo -E /opt/tljh/user/bin/pip install sos sos-notebook sos-papermill jupyterlab-sos sos-python sos-r sos-bash jupyter_contrib_nbextensions && \
+            sudo /opt/tljh/user/bin/python -m sos_notebook.install && \
+            sudo -E /opt/tljh/user/bin/jupyter labextension install transient-display-data && \
+            sudo -E /opt/tljh/user/bin/jupyter labextension install jupyterlab-sos && \
+            sudo -E /opt/tljh/user/bin/jupyter labextension disable @jupyterlab/cell-toolbar-extension && \
+            sudo tljh-config reload'
     check_status "Complete SoS installation"
 }
 
 # Create kernels for all environments
-build_kernels() {
-    echo "Building kernels..." | tee -a $LOGFILE
-    docker-compose exec tljh bash -c 'set -e; 
-        for env_path in $(sudo -E /opt/tljh/user/bin/mamba info --envs | grep -v "^#" | grep -v "base" | grep -v "sysmlv2" | grep -v "elyra" | grep -v "jupyterhub"); do
-            env=$(basename $env_path);
-            echo "Building kernel for environment: $env";
-            sudo -E /opt/tljh/user/bin/python -m ipykernel install --name $env --display-name "$env";
-        done'
+build_dakota_kernel() {
+    echo "Building Dakota kernel..." | tee -a $LOGFILE
+    docker-compose exec tljh bash -c 'set -e; \
+        sudo -E /opt/tljh/user/bin/conda create --file /tmp/envs/dakota.yaml -y && \
+        sudo -E /opt/tljh/user/bin/python -m ipykernel install --name dakota --display-name dakota'
     check_status "Build kernels"
 }
 
 # Call the functions
 start_docker
 install_tljh
-# build_env_kernels
 update_sysmlv2_kernel
 complete_sos_installation
-# build_kernels
+build_dakota_kernel
 
 # Done!!!
 echo "Script completed successfully." | tee -a $LOGFILE
