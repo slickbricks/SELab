@@ -73,7 +73,7 @@ start_docker() {
     
     echo "Starting docker-compose..." | tee -a $LOGFILE
     # docker image rm -f selab
-    docker-compose up -d
+    docker compose up -d
     check_status "docker-compose start"
 }
 
@@ -82,7 +82,7 @@ start_docker() {
 install_tljh() {
     AUTH_ADMIN=${AUTH_ADMIN:-"admin:admin"}
     echo "Create User: $AUTH_ADMIN" | tee -a $LOGFILE
-    docker-compose exec tljh bash -c \
+    docker compose exec tljh bash -c \
         "rm -rf /etc/skel/scratch/scratch && \
         curl -L https://tljh.jupyter.org/bootstrap.py \
         | sudo python3 - --show-progress-page --admin $AUTH_ADMIN --plugin git+https://github.com/kafonek/tljh-shared-directory \
@@ -94,7 +94,7 @@ install_tljh() {
 # the conda environments and the jupyter kernel.
 build_env_kernels() {
     echo "Building environment kernels..." | tee -a $LOGFILE
-    docker-compose exec tljh bash -c 'set -e; 
+    docker compose exec tljh bash -c 'set -e; 
         for env_file in $(ls /tmp/envs/*.yaml); do
             env_name=$(basename $env_file .yaml);
             echo "Processing environment: $env_name";
@@ -114,7 +114,7 @@ build_env_kernels() {
 # Update sysmlv2 kernel model publish location
 update_sysmlv2_kernel() {
     echo "Updating the Sysmlv2 kernel model publishing location" | tee -a $LOGFILE
-    docker-compose exec tljh bash -c "set -e; \
+    docker compose exec tljh bash -c "set -e; \
         sudo sed -i 's|\"ISYSML_API_BASE_PATH\": \"http://sysml2.intercax.com:9000\"|\"ISYSML_API_BASE_PATH\": \"http://sysmlapiserver:9000\"|g' /opt/tljh/user/envs/sysmlv2/share/jupyter/kernels/sysml/kernel.json"
     check_status "Sysmlv2 model publish location"
 }
