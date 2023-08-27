@@ -1,8 +1,8 @@
-rise
-plotly
-ipydrawio
-ipydrawio-export
-ipywidgets
+#rise
+#plotly
+#ipydrawio
+#ipydrawio-export
+#ipywidgets
 ipyparallel
 scipy
 pandas
