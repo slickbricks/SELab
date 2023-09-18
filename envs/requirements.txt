@@ -16,3 +16,4 @@ sos-python
 sos-bash
 sos-r
 sos-javascript
+elyra[all]
