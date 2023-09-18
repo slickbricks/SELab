@@ -55,24 +55,8 @@ check_status() {
 
 # Start docker-compose
 start_docker() {
-
-    # Check if the Docker network exists and create it if it does not
-    if [ -z "$(docker network ls | grep thenetwork)" ]; then
-    docker network create thenetwork
-    fi
-
-    # Check if the Docker volume exists and create it if it does not
-    if [ -z "$(docker volume ls | grep postgresdbserver)" ]; then
-    docker volume create postgresdbserver
-    fi
-
-    # Check if the Docker volume exists and create it if it does not
-    if [ -z "$(docker volume ls | grep user-data)" ]; then
-    docker volume create user-data
-    fi
-    
     echo "Starting docker-compose..." | tee -a $LOGFILE
-    # docker image rm -f selab
+    docker image rm -f selab
     docker-compose up -d
     check_status "docker-compose start"
 }
@@ -83,10 +67,8 @@ install_tljh() {
     AUTH_ADMIN=${AUTH_ADMIN:-"admin:admin"}
     echo "Create User: $AUTH_ADMIN" | tee -a $LOGFILE
     docker-compose exec tljh bash -c \
-        "rm -rf /etc/skel/scratch/scratch && \
-        curl -L https://tljh.jupyter.org/bootstrap.py \
-        | sudo python3 - --show-progress-page --admin $AUTH_ADMIN --plugin git+https://github.com/kafonek/tljh-shared-directory \
-        --user-requirements-txt-url https://raw.githubusercontent.com/avianinc/SELab/build/sos_elyra_n_base/envs/requirements.txt"
+        "curl -L https://tljh.jupyter.org/bootstrap.py \
+        | sudo python3 - --show-progress-page --admin $AUTH_ADMIN"
     check_status "Installed tljh"
 }
 
@@ -99,35 +81,35 @@ update_sysmlv2_kernel() {
     check_status "Sysmlv2 model publish location"
 }
 
-# Complete sos installation
-# Remove the cell toolbar extension and install the sos notebook extension
-complete_sos_installation() {
-    echo "Completing SoS installation..." | tee -a $LOGFILE
-        docker-compose exec tljh bash -c 'set -e; \
-            sudo -E /opt/tljh/user/bin/pip install sos sos-notebook sos-papermill jupyterlab-sos sos-python sos-r sos-bash jupyter_contrib_nbextensions && \
-            sudo /opt/tljh/user/bin/python -m sos_notebook.install && \
-            sudo -E /opt/tljh/user/bin/jupyter labextension install transient-display-data && \
-            sudo -E /opt/tljh/user/bin/jupyter labextension install jupyterlab-sos && \
-            sudo -E /opt/tljh/user/bin/jupyter labextension disable @jupyterlab/cell-toolbar-extension && \
-            sudo tljh-config reload'
-    check_status "Complete SoS installation"
-}
-
 # Create kernels for all environments
 build_dakota_kernel() {
     echo "Building Dakota kernel..." | tee -a $LOGFILE
     docker-compose exec tljh bash -c 'set -e; \
-        sudo -E /opt/tljh/user/bin/conda create --file /tmp/envs/dakota.yaml -y && \
-        sudo -E /opt/tljh/user/bin/python -m ipykernel install --name dakota --display-name dakota'
+        sudo /opt/tljh/user/bin/mamba env remove -n dakota && \
+        sudo -E /opt/tljh/user/bin/mamba create -n dakota ipykernel openmdao dakota && \
+        sudo -E /opt/tljh/user/bin/python -m ipykernel install --name dakota --display-name dakota && \
+        sudo tljh-config reload'
     check_status "Build kernels"
+}
+
+# Complete sos installation
+# Remove the cell toolbar extension and install the sos notebook extension
+complete_sos_installation() {
+    echo "Completing SoS installation..." | tee -a $LOGFILE
+    docker-compose exec tljh bash -c 'set -e; \
+        sudo /opt/tljh/user/bin/python -m sos_notebook.install && \
+        sudo -E /opt/tljh/user/bin/jupyter labextension install transient-display-data && \
+        sudo -E /opt/tljh/user/bin/jupyter labextension install jupyterlab-sos && \
+        sudo -E /opt/tljh/user/bin/jupyter labextension disable @jupyterlab/cell-toolbar-extension'
+    check_status "Complete SoS installation"
 }
 
 # Call the functions
 start_docker
 install_tljh
-update_sysmlv2_kernel
-complete_sos_installation
-build_dakota_kernel
+#update_sysmlv2_kernel
+#complete_sos_installation
+#build_dakota_kernel
 
 # Done!!!
 echo "Script completed successfully." | tee -a $LOGFILE
