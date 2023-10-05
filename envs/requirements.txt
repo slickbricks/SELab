@@ -16,4 +16,5 @@ sos-python
 sos-bash
 sos-r
 sos-javascript
-elyra[all]
+sos-scilab
+# elyra[all]
