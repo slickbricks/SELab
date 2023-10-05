@@ -9,12 +9,12 @@ numpy
 matplotlib
 pandas
 scipy
-sos
-sos-notebook
-jupyterlab-sos
-sos-python
-sos-bash
-sos-r
-sos-javascript
-sos-scilab
-# elyra[all]
+#sos
+#sos-notebook
+#jupyterlab-sos
+#sos-python
+#sos-bash
+#sos-r
+#sos-javascript
+#sos-scilab
+#elyra[all]
