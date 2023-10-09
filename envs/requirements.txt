@@ -12,10 +12,10 @@ scipy
 transient-display-data==0.4.3
 jupyterlab==3.6.1
 jupyterlab-sos==0.9.0
-sos-python
-sos-bash
-sos-r
-sos-javascript
-sos-scilab
+#sos-python
+#sos-bash
+#sos-r
+#sos-javascript
+#sos-scilab
 elyra-server==3.15.0
 elyra[all]==3.15.0
