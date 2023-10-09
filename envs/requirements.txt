@@ -9,6 +9,7 @@ numpy
 matplotlib
 pandas
 scipy
+jupyterlab==3.6.1
 jupyterlab-sos==0.9.0
 sos-python
 sos-bash
