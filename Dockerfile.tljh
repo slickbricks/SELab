@@ -11,7 +11,8 @@ ENV \
     DEBIAN_FRONTEND=noninteractive \
     DEBCONF_NONINTERACTIVE_SEEN=true \
     PYTHONUNBUFFERED=1 \
-    TZ=UTC/NEW_YORK
+    TZ=UTC/NEW_YORK \
+    SCILAB_EXECUTABLE='/opt/scilab-6.0.2/bin/scilab-adv-cli'
 
 # DEBIAN_FRONTEND is set to avoid being asked for input and hang during build:
 # https://anonoz.github.io/tech/2020/04/24/docker-build-stuck-tzdata.html
@@ -95,12 +96,20 @@ RUN NETLOGO_VER=6.2.0 && \
 ENV PATH="/opt/netlogo/NetLogo\ ${NETLOGO_VER}:${PATH}"
 
 # Run package updates and install packages for R
-RUN sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 \
-    && apt-get update \
-    && apt-get install -y software-properties-common \
-    && add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/' \
-    && apt-get update \
-    && apt-get install -y r-base
+#RUN sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 \
+#    && apt-get update \
+#    && apt-get install -y software-properties-common \
+#    && add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/' \
+#    && apt-get update \
+#    && apt-get install -y r-base
+
+# Install scilab and coselica toolbox
+WORKDIR /opt
+RUN wget https://www.scilab.org/download/6.0.2/scilab-6.0.2.bin.linux-x86_64.tar.gz \
+	&& tar xf scilab-6.0.2.bin.linux-x86_64.tar.gz \
+	&& /opt/scilab-6.0.2/bin/scilab-cli -e  "atomsRepositoryAdd([\"http://atoms.scilab.org/6.0\"]); exit;" -nb \
+	&& /opt/scilab-6.0.2/bin/scilab-cli -e  "atomsInstall(\"coselica\"); exit;" -nb \
+	&& rm scilab-6.0.2.bin.linux-x86_64.tar.gz
 
 # Uncomment these lines for a development install
 # ENV TLJH_BOOTSTRAP_DEV=yes \
