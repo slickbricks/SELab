@@ -37,6 +37,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     r-base \
     r-base-dev \
     # scilab \
+    jq \
     && rm -rf /var/lib/apt/lists/*
 
 # Kill all the things we don't need

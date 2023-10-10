@@ -123,23 +123,78 @@ install_sysmlv2_kernel() {
 
 # Install sos kernels
 install_sos_kernels() {
-    echo "Installing Notebook Kernels" | tee -a $LOGFILE
+    echo "Installing SoS Kernels" | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
         echo 'Installing Notebook Kernels'; \
         sudo -E /opt/tljh/user/bin/pip install jupyterlab-sos==0.9.0 sos-r sos-python transient-display-data==0.4.3 sos-bash bash_kernel; \
         sudo -E /opt/tljh/user/bin/mamba install -c conda-forge r-base r-essentials jupyterlab==3.6.1 -y; \
         sudo -E /opt/tljh/user/bin/python -m bash_kernel.install; \
         sudo -E /opt/tljh/user/bin/python -m sos_notebook.install;"
-    check_status "Installed SoS Notebook"
+    check_status "Installed SoS Kernels"
 }
 
+install_scilab_kernel() {
+    echo "Installing Scilab Kernel" | tee -a $LOGFILE
+    docker-compose exec tljh bash -c "set -e; \
+        sudo -E /opt/tljh/user/bin/pip install scilab-kernel;" \
+        sudo jq '. += {"env": {"SCILAB_EXECUTABLE": "/opt/scilab-6.0.2/bin/scilab-adv-cli"}}' /opt/tljh/user/share/jupyter/kernels/scilab/kernel.json > /tmp/temp.json && mv /tmp/temp.json /opt/tljh/user/share/jupyter/kernels/scilab/kernel.json
+    check_status "Installed Scilab Kernel"
+}
 
+# Had to hack a bit to slow down the modifiying of the kernel.json file
+# to allow the kernel to be installed first.
+
+install_scilab_kernel() {
+    echo "Installing Scilab Kernel" | tee -a $LOGFILE
+    docker-compose exec tljh bash -c "set -e; \
+    sudo -E /opt/tljh/user/bin/pip install scilab-kernel; \
+    for i in {1..30}; do \
+        if [ -f /opt/tljh/user/share/jupyter/kernels/scilab/kernel.json ]; then \
+            sudo jq '. += {\"env\": {\"SCILAB_EXECUTABLE\": \"/opt/scilab-6.0.2/bin/scilab-adv-cli\"}}' /opt/tljh/user/share/jupyter/kernels/scilab/kernel.json > /tmp/temp.json; \
+            sudo mv /tmp/temp.json /opt/tljh/user/share/jupyter/kernels/scilab/kernel.json; \
+            break; \
+        else \
+            echo 'Waiting for kernel.json to be created'; \
+            sleep 2; \
+        fi; \
+    done"
+    check_status "Installed Scilab Kernel"
+}
+
+# Not likeing this error with icu and r-timechange install from conda-forge
+install_dakota_kernel() {
+    echo "Installing Dakota Kernel" | tee -a $LOGFILE
+    docker-compose exec tljh bash -c "set -e; \
+        # Create a new Mamba environment named 'dakota_env' with Python 3.10
+        sudo -E /opt/tljh/user/bin/mamba create --name dakota_env python=3.10 -y; \
+        # Install Dakota version 6.14.0 in the new environment
+        sudo -E /opt/tljh/user/bin/mamba install -c conda-forge dakota=6.14.0 python=3.10 -y; \
+        # Directory for the new Dakota Jupyter kernel
+        KERNEL_DIR=/opt/tljh/user/share/jupyter/kernels/dakota; \
+        sudo mkdir -p \$KERNEL_DIR; \
+        # Location of Python executable in the dakota_env environment
+        PYTHON_EXEC=/opt/conda/envs/dakota_env/bin/python3; \
+        # Create the kernel.json file
+        echo '{
+          \"argv\": [\"'\$PYTHON_EXEC'\", \"-m\", \"ipykernel_launcher\", \"-f\", \"{connection_file}\"],
+          \"display_name\": \"Dakota\",
+          \"language\": \"python\",
+          \"env\": {}
+        }' | sudo tee \$KERNEL_DIR/kernel.json > /dev/null; \
+        # Set permissions
+        # sudo chown -R jupyterhub:jupyterhub \$KERNEL_DIR;
+        echo 'Dakota kernel installed';"
+    check_status "Installed Dakota Kernel"
+}
 
 # Call the functions
 start_docker
 install_tljh
 install_sysmlv2_kernel
 install_sos_kernels
+install_scilab_kernel
+#build_env_kernels
+
 
 #build_env_kernels
 #install_sos_notebook
