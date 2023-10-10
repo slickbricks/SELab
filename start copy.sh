@@ -121,25 +121,52 @@ install_sysmlv2_kernel() {
     check_status "Sysmlv2 model publish location"
 }
 
-# Install sos kernels
-install_sos_kernels() {
+install_sos_kernel_bak2() {
     echo "Installing Notebook Kernels" | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
         echo 'Installing Notebook Kernels'; \
-        sudo -E /opt/tljh/user/bin/pip install jupyterlab-sos==0.9.0 sos-r sos-python transient-display-data==0.4.3 sos-bash bash_kernel; \
-        sudo -E /opt/tljh/user/bin/mamba install -c conda-forge r-base r-essentials jupyterlab==3.6.1 -y; \
+        sudo -E /opt/tljh/user/bin/pip install jupyterlab-sos==0.9.0 sos-python sos-r transient-display-data==0.4.3 sos-bash bash_kernel pyarrow jupyter-client; \
+        sudo -E Rscript -e 'install.packages(\"IRkernel\", repos=\"http://cran.us.r-project.org\")'; \
+        sudo -E Rscript -e 'IRkernel::installspec(user = FALSE, sys_prefix = TRUE)'; \
+        sudo -E Rscript -e 'install.packages(\"arrow\", repos=\"http://cran.us.r-project.org\")'; \
         sudo -E /opt/tljh/user/bin/python -m bash_kernel.install; \
         sudo -E /opt/tljh/user/bin/python -m sos_notebook.install;"
     check_status "Installed SoS Notebook"
 }
 
+install_sos_kernels_bak() {
+    echo "Installing Notebook Kernels" | tee -a $LOGFILE
+    docker-compose exec tljh bash -c "set -e; \
+        echo 'Installing Notebook Kernels'; \
+        sudo -E /opt/tljh/user/bin/mamba install --no-update-deps -c conda-forge r-base r-essentials sos-r -y; \
+        sudo -E /opt/tljh/user/bin/pip install jupyterlab-sos==0.9.0 sos-python transient-display-data==0.4.3 sos-bash bash_kernel; \
+        sudo -E /opt/tljh/user/bin/python -m bash_kernel.install; \
+        sudo -E /opt/tljh/user/bin/python -m sos_notebook.install;"
+    check_status "Installed SoS Notebook"
+}
 
+install_r_env() {
+    echo "Installing R Kernel" | tee -a $LOGFILE
+    docker-compose exec tljh bash -c "set -e; \
+        echo 'Installing R Kernel'; \
+        # Create Conda environment
+        sudo -E /opt/tljh/user/bin/mamba create --name Renv python=3.10 -y; \
+        sudo -E /opt/tljh/user/bin/mamba activate Renv; \
+        # Install Kernel
+        sudo -E /opt/tljh/user/bin/pip install ipykernel; \
+        sudo -E /opt/tljh/user/bin/python -m ipykernel install --sys-prefix --name Renv --display-name 'Renv'; \
+        # Install R
+        sudo -E /opt/tljh/user/bin/mamba install -c conda-forge sos-r -y; \
+        sudo -E /opt/tljh/user/bin/mamba deactivate Renv;"
+    check_status "Installed R Notebook"
+}
 
 # Call the functions
 start_docker
 install_tljh
 install_sysmlv2_kernel
-install_sos_kernels
+install_r_env
+#install_sos_kernels
 
 #build_env_kernels
 #install_sos_notebook

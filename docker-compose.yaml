@@ -34,7 +34,7 @@ services:
     privileged: true
     # restart: always
     ports:
-      - 8889:80
+      - 8888:80
     environment:
       TZ: UTC/NEW_YORK
     volumes:
