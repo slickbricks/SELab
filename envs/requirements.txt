@@ -18,4 +18,8 @@ jupyterlab-sos==0.9.0
 #sos-javascript
 #sos-scilab
 elyra-server==3.15.0
+<<<<<<< HEAD
 elyra[all]==3.15.0
+=======
+elyra[all]==3.15.0
+>>>>>>> 5f4c7eba2d117fb9b37bde17810d50f134f68c0c
