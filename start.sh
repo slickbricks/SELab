@@ -91,27 +91,6 @@ install_tljh() {
     check_status "Installed tljh"
 }
 
-# This function loops through all yaml files in the /tmp/envs and builds 
-# the conda environments and the jupyter kernel.
-build_env_kernels() {
-    echo "Building environment kernels..." | tee -a $LOGFILE
-    docker-compose exec tljh bash -c 'set -e; 
-        for env_file in $(ls /tmp/envs/*.yaml); do
-            env_name=$(basename $env_file .yaml);
-            echo "Processing environment: $env_name";
-            echo "List of environments:";
-            sudo -E /opt/tljh/user/bin/mamba info --envs;
-            if [[ $(sudo -E /opt/tljh/user/bin/mamba info --envs | grep -w $env_name) ]]; then
-                echo "Updating environment $env_name";
-                sudo -E /opt/tljh/user/bin/mamba env update --name $env_name -f $env_file
-            else
-                echo "Creating environment $env_name";
-                sudo -E /opt/tljh/user/bin/mamba env create -f $env_file
-            fi
-        done && sudo -E /opt/tljh/user/bin/mamba env update -f /tmp/updates/update_kernels.yaml'
-    check_status "Build environment kernels"
-}
-
 # Update sysmlv2 kernel model publish location
 install_sysmlv2_kernel() {
     echo "Updating the Sysmlv2 kernel model publishing location" | tee -a $LOGFILE
@@ -143,7 +122,6 @@ install_scilab_kernel() {
 
 # Had to hack a bit to slow down the modifiying of the kernel.json file
 # to allow the kernel to be installed first.
-
 install_scilab_kernel() {
     echo "Installing Scilab Kernel" | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
@@ -161,49 +139,17 @@ install_scilab_kernel() {
     check_status "Installed Scilab Kernel"
 }
 
-# Not likeing this error with icu and r-timechange install from conda-forge
-install_dakota_kernel() {
-    echo "Installing Dakota Kernel" | tee -a $LOGFILE
-    docker-compose exec tljh bash -c "set -e; \
-        # Create a new Mamba environment named 'dakota_env' with Python 3.10
-        sudo -E /opt/tljh/user/bin/mamba create --name dakota_env python=3.10 -y; \
-        # Install Dakota version 6.14.0 in the new environment
-        sudo -E /opt/tljh/user/bin/mamba install -c conda-forge dakota=6.14.0 python=3.10 -y; \
-        # Directory for the new Dakota Jupyter kernel
-        KERNEL_DIR=/opt/tljh/user/share/jupyter/kernels/dakota; \
-        sudo mkdir -p \$KERNEL_DIR; \
-        # Location of Python executable in the dakota_env environment
-        PYTHON_EXEC=/opt/conda/envs/dakota_env/bin/python3; \
-        # Create the kernel.json file
-        echo '{
-          \"argv\": [\"'\$PYTHON_EXEC'\", \"-m\", \"ipykernel_launcher\", \"-f\", \"{connection_file}\"],
-          \"display_name\": \"Dakota\",
-          \"language\": \"python\",
-          \"env\": {}
-        }' | sudo tee \$KERNEL_DIR/kernel.json > /dev/null; \
-        # Set permissions
-        # sudo chown -R jupyterhub:jupyterhub \$KERNEL_DIR;
-        echo 'Dakota kernel installed';"
-    check_status "Installed Dakota Kernel"
-}
-
 # Call the functions
 start_docker
 install_tljh
 install_sysmlv2_kernel
 install_sos_kernels
 install_scilab_kernel
-#build_env_kernels
-
-
-#build_env_kernels
-#install_sos_notebook
 
 # Done!!!
 echo "Script completed successfully." | tee -a $LOGFILE
 
-
-
 # Notes:
 # 10/5/23 - Simplified installation requirements. Removed the need for a separate requirements.txt file for Elyra.
 # 10/6/23 - Updated nodejs in base environment to 18.x (Dockerfile.tljh)
+# 10/10/23 - Major clean up most kernels installed and working. Finishing up Dakota kernel
