@@ -104,15 +104,21 @@ install_sysmlv2_kernel() {
 install_sos_kernels() {
     echo "Installing SoS Kernels" | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
-        echo 'Installing Notebook Kernels'; \
-        sudo -E /opt/tljh/user/bin/pip install jupyterlab-sos==0.9.0 sos-r sos-python transient-display-data==0.4.3 sos-bash bash_kernel; \
-        sudo -E /opt/tljh/user/bin/mamba install -c conda-forge r-base r-essentials jupyterlab==3.6.1 -y; \
+        echo 'Installing SoS Kernels'; \
+
+        #sudo -E /opt/tljh/user/bin/pip install jupyterlab-sos==0.9.0 sos-r sos-python transient-display-data==0.4.3 sos-bash bash_kernel; \
+        #sudo -E /opt/tljh/user/bin/mamba install -c conda-forge r-base r-essentials jupyterlab==3.6.1 -y; \
+
+        sudo -E /opt/tljh/user/bin/pip install jupyterlab-sos sos-python sos-scilab sos-bash bash_kernel jupyterlab-rise; \
+        sudo -E /opt/tljh/user/bin/mamba install -c conda-forge sos-r -y; \
+        
+        #sudo -E /opt/tljh/user/bin/mamba install -c conda-forge r-base r-essentials -y; \
         sudo -E /opt/tljh/user/bin/python -m bash_kernel.install; \
         sudo -E /opt/tljh/user/bin/python -m sos_notebook.install;"
     check_status "Installed SoS Kernels"
 }
 
-install_scilab_kernel() {
+install_scilab_kernelx() {
     echo "Installing Scilab Kernel" | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
         sudo -E /opt/tljh/user/bin/pip install scilab-kernel;" \
@@ -153,3 +159,4 @@ echo "Script completed successfully." | tee -a $LOGFILE
 # 10/5/23 - Simplified installation requirements. Removed the need for a separate requirements.txt file for Elyra.
 # 10/6/23 - Updated nodejs in base environment to 18.x (Dockerfile.tljh)
 # 10/10/23 - Major clean up most kernels installed and working. Finishing up Dakota kernel
+# 11/15/23 - Added Scilab kernel and cleaned up the script will move to main branch (no elayra yet, waiting on jl4 support)
