@@ -105,25 +105,11 @@ install_sos_kernels() {
     echo "Installing SoS Kernels" | tee -a $LOGFILE
     docker-compose exec tljh bash -c "set -e; \
         echo 'Installing SoS Kernels'; \
-
-        #sudo -E /opt/tljh/user/bin/pip install jupyterlab-sos==0.9.0 sos-r sos-python transient-display-data==0.4.3 sos-bash bash_kernel; \
-        #sudo -E /opt/tljh/user/bin/mamba install -c conda-forge r-base r-essentials jupyterlab==3.6.1 -y; \
-
         sudo -E /opt/tljh/user/bin/pip install jupyterlab-sos sos-python sos-scilab sos-bash bash_kernel jupyterlab-rise; \
-        sudo -E /opt/tljh/user/bin/mamba install -c conda-forge sos-r -y; \
-        
-        #sudo -E /opt/tljh/user/bin/mamba install -c conda-forge r-base r-essentials -y; \
+        sudo -E /opt/tljh/user/bin/mamba install -c conda-forge sos-r nodejs -y; \
         sudo -E /opt/tljh/user/bin/python -m bash_kernel.install; \
         sudo -E /opt/tljh/user/bin/python -m sos_notebook.install;"
     check_status "Installed SoS Kernels"
-}
-
-install_scilab_kernelx() {
-    echo "Installing Scilab Kernel" | tee -a $LOGFILE
-    docker-compose exec tljh bash -c "set -e; \
-        sudo -E /opt/tljh/user/bin/pip install scilab-kernel;" \
-        sudo jq '. += {"env": {"SCILAB_EXECUTABLE": "/opt/scilab-6.0.2/bin/scilab-adv-cli"}}' /opt/tljh/user/share/jupyter/kernels/scilab/kernel.json > /tmp/temp.json && mv /tmp/temp.json /opt/tljh/user/share/jupyter/kernels/scilab/kernel.json
-    check_status "Installed Scilab Kernel"
 }
 
 # Had to hack a bit to slow down the modifiying of the kernel.json file
